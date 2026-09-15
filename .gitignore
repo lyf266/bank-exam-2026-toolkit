@@ -1,0 +1,23 @@
+# 忽略大型多媒体与归档文件
+*.mp4
+*.avi
+*.mkv
+*.zip
+*.rar
+*.tar.gz
+*.7z
+
+# 忽略软链接指向的大型目录
+本地全量资料库/
+
+# Python 缓存
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# 操作系统与编辑器生成文件
+.DS_Store
+*.swp
+*~
+.idea/
+.vscode/
