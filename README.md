@@ -52,11 +52,14 @@ $$\begin{aligned}
 ├── README.md                                # 本备考总览与避坑大纲
 ├── 01_每日45分钟执行看板.md                   # 每日 45 分钟打卡流水线与刷题记录
 ├── 02_在线程序与平台导航.md                   # 官方机考模拟与主流免费题库直达入口
-├── quick_quiz.py                            # 本地 Python 命令行全真机考极速自测 CLI
+├── quick_quiz.py                            # 本地全真机考极速自测与历年真题模拟系统 CLI
 ├── generate_bank_exam_cards.py              # Anki 客观题生成、同步与 .apkg 导出引擎
-├── import_all_exam_papers.py                # 4大权威讲义PDF真题/模考全量475题解析注入引擎
+├── import_all_exam_papers.py                # 4大权威讲义PDF真题/模考全量479题解析注入引擎
+├── data/past_papers/                        # 近三年（2023~2025）全真套卷 JSON 题库（10套卷·538题）
+├── tools/generate_past_papers_json.py       # 全真题库生成与 2026 新规审校流水线
+├── 错题本_盲区特训账本.md                     # 做题错题与盲区全量沉淀账本 (已连通自测系统)
 ├── 2026银行从业初级_全真机考客观题.apkg        # 独立客观题离线卡包 (手机/平板/PC通用)
-├── 2026银行从业初级_全真套题全量卡包.apkg      # 包含全部695张卡片的完整离线卡包
+├── 2026银行从业初级_全真套题全量卡包.apkg      # 包含全部710张卡片的完整离线卡包
 └── 本地全量资料库 -> (软链接)                  # 指向 13.7GB 讲义与视频原始库 (已标旧版)
 ```
 
@@ -106,15 +109,28 @@ $$\begin{aligned}
 
 ## ⚡ 极速启动
 
-在当前终端中直接运行本地刷题工具，即可启动交互式 2026 高频核心真题自测：
+在当前终端中直接运行本地刷题工具，即可启动交互式 2026 高频核心真题自测与历年套卷模考：
 
 ```bash
-# 启动本地 CLI 全题型自测
+# 启动本地交互式全真模拟机考系统 (进入主菜单选择套卷/抽测)
 python3 quick_quiz.py
 
-# 随机抽测 10 题速刷
-python3 quick_quiz.py --num 10
+# 列出当前已收录的 10 套近三年全真试卷与题量统计
+python3 quick_quiz.py --list
 
-# 重新生成并同步 Anki 卡牌
-python3 generate_bank_exam_cards.py
+# 指定直接模考某套试卷 (如 2024 年 6 月法律法规真题卷)
+python3 quick_quiz.py --paper 2024_06_law
+
+# 仅自测《银行业法律法规与综合能力》单科 (随机抽 20 题)
+python3 quick_quiz.py --law --num 20
+
+# 仅自测《个人理财》单科 (随机抽 20 题)
+python3 quick_quiz.py --finance --num 20
+
+# 跨卷随机快速抽测 15 题
+python3 quick_quiz.py --num 15
+
+# 重新生成近三年题库 JSON 并执行 2026 新规审校
+python3 tools/generate_past_papers_json.py
 ```
+

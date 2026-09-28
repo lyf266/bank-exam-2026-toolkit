@@ -343,23 +343,32 @@ def parse_exam_pdf(pdf_config):
             p -= 1
 
         # 题干起始行定位
-        stem_start = limit_prev
-        for i in range(limit_prev, p + 1):
-            l = lines[i]
-            if re.match(r"^\d{1,3}[、\.](?!\d)", l):
-                stem_start = i
-                break
-            if re.match(r"^\d{1,3}$", l) and i + 1 <= p and (lines[i+1] in [".", "、"] or any(kw in lines[i+1] for kw in ["单", "多", "判"])):
-                stem_start = i
-                break
-            if any(s in l for s in ["一、单项选择题", "二、多项选择题", "三、判断题", "单选题：", "多选题：", "判断题："]):
-                stem_start = i
-                break
-            if re.match(r"^第[一二三四五六七八九十]+章", l):
-                stem_start = i
-                break
-
-        stem_raw = lines[stem_start : p + 1] if found_a else lines[stem_start : a_idx]
+        if not found_a:
+            opt_lines = []
+            stem_start = limit_prev
+            for i in range(limit_prev, a_idx):
+                l = lines[i]
+                if re.match(r"^\d{1,3}[、\.](?!\d)", l) or any(s in l for s in ["一、单项选择题", "二、多项选择题", "三、判断题", "单选题：", "多选题：", "判断题："]):
+                    stem_start = i
+                    break
+            stem_raw = lines[stem_start:a_idx]
+        else:
+            stem_start = limit_prev
+            for i in range(limit_prev, p + 1):
+                l = lines[i]
+                if re.match(r"^\d{1,3}[、\.](?!\d)", l):
+                    stem_start = i
+                    break
+                if re.match(r"^\d{1,3}$", l) and i + 1 <= p and (lines[i+1] in [".", "、"] or any(kw in lines[i+1] for kw in ["单", "多", "判"])):
+                    stem_start = i
+                    break
+                if any(s in l for s in ["一、单项选择题", "二、多项选择题", "三、判断题", "单选题：", "多选题：", "判断题："]):
+                    stem_start = i
+                    break
+                if re.match(r"^第[一二三四五六七八九十]+章", l):
+                    stem_start = i
+                    break
+            stem_raw = lines[stem_start : p + 1]
         stem_str = " ".join(stem_raw).strip()
         stem_str = re.sub(r"^(?:6\s*月模考金题[（\(][一二三][\)）]\s*)", "", stem_str).strip()
         stem_str = re.sub(r"^(?:[一二三四]、\s*[单多选判].*?题[。]?)", "", stem_str).strip()
