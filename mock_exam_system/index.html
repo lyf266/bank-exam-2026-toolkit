@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2026 银行业专业人员初级职业资格机考模拟系统 (1:1 官方考场仿真)</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- 顶部官方状态栏 -->
+  <header class="header-bar">
+    <div class="exam-title-box">
+      <div style="display:flex; align-items:center;">
+        <span style="font-size: 20px; margin-right: 8px;">🏦</span>
+        <h1 id="exam-subject-name">2026 初级《银行业法律法规与综合能力》核心模考卷</h1>
+        <span class="exam-badge">官方机考 1:1 仿真</span>
+      </div>
+      <div style="margin-top: 4px; display:flex; align-items:center; gap:8px;">
+        <label for="select-exam" style="font-size:12px; color:#CBD5E1;">切换试卷：</label>
+        <select id="select-exam" style="background:#0F172A; color:#FFFFFF; border:1px solid #334155; padding:2px 8px; border-radius:4px; font-size:12px;">
+          <!-- 动态注入试卷选项 -->
+        </select>
+      </div>
+    </div>
+
+    <div class="header-center">
+      <div class="timer-box" title="考试剩余时间">
+        <span>⏱️</span>
+        <span id="timer-countdown">02:00:00</span>
+      </div>
+      <div class="candidate-box">
+        <div>考生姓名：<strong>备考冲刺考生</strong></div>
+        <div style="color:#94A3B8;">|</div>
+        <div>准考证号：<strong>2026CBA8888</strong></div>
+      </div>
+    </div>
+
+    <div class="header-right">
+      <button class="btn-header" id="btn-toggle-calc" title="调出考场专用金融/科学计算器">
+        <span>🧮</span> 机考计算器
+      </button>
+      <button class="btn-header" id="btn-import-modal" title="自定义导入任意真题与模拟题">
+        <span>📥</span> 导入题库
+      </button>
+      <div style="display:flex; gap:2px;">
+        <button class="btn-header" id="btn-font-plus" style="padding:6px 8px;" title="放大字体">A+</button>
+        <button class="btn-header" id="btn-font-minus" style="padding:6px 8px;" title="缩小字体">A-</button>
+      </div>
+      <button class="btn-header btn-submit-exam" id="btn-submit-exam">
+        交卷判分
+      </button>
+    </div>
+  </header>
+
+  <!-- 主体工作区 -->
+  <main class="main-wrapper">
+    <!-- 左侧：题目交互主卡片 -->
+    <section class="question-container">
+      <div class="question-header">
+        <div style="display:flex; align-items:center; gap:12px;">
+          <span class="type-tag" id="q-type-tag">单选题</span>
+          <span class="question-meta">第 <b id="q-current-num">1</b> / <span id="q-total-num">--</span> 题 (本题 <span id="q-score">0.5</span> 分)</span>
+        </div>
+        <button class="btn-mark" id="btn-mark-toggle">
+          🏳️ 标记本题
+        </button>
+      </div>
+
+      <div class="question-body">
+        <div class="question-text" id="q-content-text">
+          正在加载题库，请稍候...
+        </div>
+        <div class="options-list" id="options-container">
+          <!-- 动态注入选项 -->
+        </div>
+      </div>
+
+      <div class="question-footer">
+        <button class="btn-nav" id="btn-prev" disabled>
+          ◀ 上一题
+        </button>
+        <div style="font-size:12px; color:#64748B;">
+          💡 提示：多选题“多选、少选、错选均不得分”；单选题及判断题请选择最确定项。
+        </div>
+        <button class="btn-nav primary" id="btn-next">
+          下一题 ▶
+        </button>
+      </div>
+    </section>
+
+    <!-- 右侧：官方 145 题答题卡矩阵 -->
+    <aside class="answersheet-container">
+      <div class="sheet-header">
+        <h3>答题卡</h3>
+        <div class="sheet-legend">
+          <div class="legend-item"><div class="legend-box answered"></div>已答</div>
+          <div class="legend-item"><div class="legend-box marked"></div>标记</div>
+          <div class="legend-item"><div class="legend-box"></div>未答</div>
+        </div>
+      </div>
+      <div class="sheet-body" id="sheet-groups-container">
+        <!-- 动态生成题号矩阵 -->
+      </div>
+    </aside>
+  </main>
+
+  <!-- 悬浮考场专用金融计算器模态框 -->
+  <div class="calc-modal" id="calc-modal">
+    <div class="calc-header" id="calc-header">
+      <span>🧮 机考专用金融/科学计算器 (按住拖动)</span>
+      <button class="calc-close" id="btn-close-calc">&times;</button>
+    </div>
+    <div class="calc-body">
+      <input type="text" class="calc-display" id="calc-display" value="0" readonly>
+
+      <!-- TVM 快捷面板 -->
+      <div class="tvm-panel">
+        <div class="tvm-status-row">
+          <div class="tvm-status-col">N:<span id="tvm-val-N">--</span></div>
+          <div class="tvm-status-col">I/Y:<span id="tvm-val-IY">--</span>%</div>
+          <div class="tvm-status-col">PV:<span id="tvm-val-PV">--</span></div>
+          <div class="tvm-status-col">PMT:<span id="tvm-val-PMT">--</span></div>
+          <div class="tvm-status-col">FV:<span id="tvm-val-FV">--</span></div>
+        </div>
+        <div class="tvm-controls">
+          <label style="display:flex; align-items:center; gap:2px; cursor:pointer;">
+            <input type="radio" name="tvm-mode" value="set" checked> 输入赋值
+          </label>
+          <label style="display:flex; align-items:center; gap:2px; cursor:pointer;">
+            <input type="radio" name="tvm-mode" value="cpt"> CPT 计算
+          </label>
+          <button id="btn-reset-tvm" style="margin-left:auto; background:none; border:none; color:#2563EB; cursor:pointer; font-size:11px;">清空TVM</button>
+        </div>
+        <div class="tvm-btn-grid">
+          <button class="tvm-btn" data-param="N">N</button>
+          <button class="tvm-btn" data-param="IY">I/Y</button>
+          <button class="tvm-btn" data-param="PV">PV</button>
+          <button class="tvm-btn" data-param="PMT">PMT</button>
+          <button class="tvm-btn" data-param="FV">FV</button>
+        </div>
+      </div>
+
+      <!-- 标准键位区 -->
+      <div class="calc-grid">
+        <button class="calc-btn op" data-action="clear">C</button>
+        <button class="calc-btn op" data-action="backspace">⌫</button>
+        <button class="calc-btn op" data-val="^">xʸ</button>
+        <button class="calc-btn op" data-val="÷">÷</button>
+
+        <button class="calc-btn" data-val="7">7</button>
+        <button class="calc-btn" data-val="8">8</button>
+        <button class="calc-btn" data-val="9">9</button>
+        <button class="calc-btn op" data-val="×">×</button>
+
+        <button class="calc-btn" data-val="4">4</button>
+        <button class="calc-btn" data-val="5">5</button>
+        <button class="calc-btn" data-val="6">6</button>
+        <button class="calc-btn op" data-val="-">-</button>
+
+        <button class="calc-btn" data-val="1">1</button>
+        <button class="calc-btn" data-val="2">2</button>
+        <button class="calc-btn" data-val="3">3</button>
+        <button class="calc-btn op" data-val="+">+</button>
+
+        <button class="calc-btn" data-val="0">0</button>
+        <button class="calc-btn" data-val=".">.</button>
+        <button class="calc-btn op" data-action="sqrt">√</button>
+        <button class="calc-btn eval" data-action="eval">=</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 导入自定义题库模态框 -->
+  <div class="full-modal" id="import-modal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2>📥 导入自定义模拟题库</h2>
+        <button class="calc-close" id="btn-close-import" style="font-size:24px;">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div style="font-size:13px; color:#475569; margin-bottom:12px;">
+          您可以直接在下方文本框中粘贴文本题目，或者上传标准 JSON 题库文件：
+        </div>
+
+        <div style="margin-bottom:14px;">
+          <label style="font-size:13px; font-weight:700;">方式一：直接粘贴题目文本（支持单选/多选/判断）</label>
+          <textarea id="import-textarea" rows="10" style="width:100%; border:1px solid #CBD5E1; border-radius:6px; padding:10px; font-family:monospace; font-size:12px; margin-top:6px;" placeholder="【示例格式】：
+1. [单选题] 某投资项目预期收益率为20%，期限3年，利息再投资，初始存入1万元，终值是多少？
+A. 17000
+B. 17280
+C. 17400
+D. 17500
+答案: B
+解析: 利息再投资即复利，FV = 10000 * (1+0.2)^3 = 17280元。
+口诀: 未加说明默认年，利息再投即复利。"></textarea>
+        </div>
+
+        <div>
+          <label style="font-size:13px; font-weight:700;">方式二：上传 JSON 文件</label>
+          <input type="file" id="import-file-input" accept=".json" style="margin-top:6px; font-size:13px;">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-nav" id="btn-close-import-2" onclick="document.getElementById('import-modal').style.display='none'">取消</button>
+        <button class="btn-nav primary" id="btn-do-import">确认导入试卷</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 成绩单与错题复盘看板模态框 -->
+  <div class="full-modal" id="result-modal">
+    <div class="modal-card" style="width: 780px;">
+      <div class="modal-header">
+        <h2>📊 考试成绩与全真判分报告</h2>
+        <button class="calc-close" id="btn-close-result" style="font-size:24px;">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div style="display:flex; justify-content:space-between; align-items:center; background:#F8FAFC; border:1px solid #E2E8F0; border-radius:8px; padding:16px 24px; margin-bottom:20px;">
+          <div>
+            <div style="font-size:13px; color:#64748B;">本次模考总得分</div>
+            <div style="font-size:40px; font-weight:800; color:#1E3A8A; line-height:1.2;">
+              <span id="res-score-val">0</span> <span style="font-size:18px; font-weight:600; color:#64748B;">分</span>
+            </div>
+            <div id="res-rate-text" style="font-size:12px; color:#475569; margin-top:4px;"></div>
+          </div>
+          <div style="text-align:right;">
+            <div id="res-status-text" style="font-size:16px; font-weight:700; color:#15803D; margin-bottom:8px;">
+              🎉 成绩合格！稳过 60 分基本盘！
+            </div>
+            <div style="font-size:12px; color:#64748B;">及格线：60.0 分 ｜ 考试时长：120 分钟</div>
+          </div>
+        </div>
+
+        <h3 style="font-size:14px; font-weight:700; margin-bottom:10px; color:#1E293B;">📝 错题提纯与考点解析清单</h3>
+        <div id="res-wrongs-list">
+          <!-- 动态注入错题列表 -->
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-nav" id="btn-export-wrongs">📥 一键导出错题本 (.md)</button>
+        <button class="btn-nav primary" id="btn-restart-exam">🔄 重新自测</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 脚本加载 -->
+  <script src="calculator.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

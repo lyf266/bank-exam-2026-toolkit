@@ -1,0 +1,615 @@
+/* 2026 银行从业初级资格机考仿真模拟系统 · 官方高保真样式表 */
+
+:root {
+  --primary-navy: #1E3A8A;
+  --primary-blue: #2563EB;
+  --primary-light: #EFF6FF;
+  --text-main: #0F172A;
+  --text-muted: #64748B;
+  --border-color: #E2E8F0;
+  --bg-main: #F1F5F9;
+  --color-answered: #10B981;
+  --color-marked: #F59E0B;
+  --color-unanswered: #FFFFFF;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Source Han Sans SC", "Noto Sans CJK SC", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  line-height: 1.5;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* 顶部考场状态栏 (1:1 官方质感) */
+.header-bar {
+  background-color: var(--primary-navy);
+  color: #FFFFFF;
+  padding: 10px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  z-index: 50;
+}
+
+.exam-title-box h1 {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.exam-title-box .exam-badge {
+  font-size: 11px;
+  background-color: rgba(255,255,255,0.2);
+  padding: 2px 8px;
+  border-radius: 4px;
+  margin-left: 8px;
+}
+
+.header-center {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.timer-box {
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 4px 16px;
+  border-radius: 6px;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 20px;
+  font-weight: 700;
+  color: #FDE047;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.timer-box.warning {
+  color: #EF4444;
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.candidate-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 4px 12px;
+  border-radius: 4px;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn-header {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #FFFFFF;
+  padding: 6px 14px;
+  border-radius: 4px;
+  font-size: 13px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s;
+}
+
+.btn-header:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.btn-submit-exam {
+  background: #DC2626;
+  border-color: #B91C1C;
+  font-weight: 700;
+}
+
+.btn-submit-exam:hover {
+  background: #B91C1C;
+}
+
+/* 主操作与题目区域 */
+.main-wrapper {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  padding: 16px 20px;
+  gap: 20px;
+}
+
+/* 左侧题目容器 */
+.question-container {
+  flex: 1;
+  background: #FFFFFF;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.question-header {
+  padding: 14px 24px;
+  background: #F8FAFC;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.type-tag {
+  background: #DBEAFE;
+  color: #1E40AF;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.type-tag.multi {
+  background: #FEF3C7;
+  color: #92400E;
+}
+
+.type-tag.judge {
+  background: #DCFCE7;
+  color: #166534;
+}
+
+.question-meta {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.btn-mark {
+  background: #FFFFFF;
+  border: 1px solid #CBD5E1;
+  color: #475569;
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-size: 13px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s;
+}
+
+.btn-mark.marked {
+  background: #FEF3C7;
+  border-color: #F59E0B;
+  color: #B45309;
+  font-weight: 700;
+}
+
+.question-body {
+  padding: 24px 32px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.question-text {
+  font-size: 16px;
+  line-height: 1.8;
+  font-weight: 600;
+  margin-bottom: 24px;
+  color: #0F172A;
+}
+
+.options-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.option-item {
+  display: flex;
+  align-items: flex-start;
+  padding: 12px 18px;
+  border: 1px solid #E2E8F0;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: #FFFFFF;
+}
+
+.option-item:hover {
+  background: #F8FAFC;
+  border-color: #94A3B8;
+}
+
+.option-item.selected {
+  background: #EFF6FF;
+  border-color: #3B82F6;
+  box-shadow: 0 0 0 1px #3B82F6;
+}
+
+.option-prefix {
+  font-weight: 700;
+  color: var(--primary-blue);
+  width: 28px;
+  flex-shrink: 0;
+}
+
+.option-content {
+  flex: 1;
+  font-size: 15px;
+}
+
+/* 底部题目翻页动作栏 */
+.question-footer {
+  padding: 14px 24px;
+  background: #F8FAFC;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.btn-nav {
+  background: #FFFFFF;
+  border: 1px solid #CBD5E1;
+  color: #334155;
+  padding: 8px 20px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-nav:hover:not(:disabled) {
+  background: #F1F5F9;
+  border-color: #94A3B8;
+}
+
+.btn-nav:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.btn-nav.primary {
+  background: var(--primary-blue);
+  border-color: #1D4ED8;
+  color: #FFFFFF;
+}
+
+.btn-nav.primary:hover:not(:disabled) {
+  background: #1D4ED8;
+}
+
+/* 右侧答题卡区域 */
+.answersheet-container {
+  width: 320px;
+  background: #FFFFFF;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.sheet-header {
+  padding: 12px 18px;
+  background: #F8FAFC;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sheet-header h3 {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.sheet-legend {
+  display: flex;
+  gap: 12px;
+  font-size: 11px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.legend-box {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  border: 1px solid #CBD5E1;
+}
+
+.legend-box.answered {
+  background: var(--color-answered);
+  border-color: var(--color-answered);
+}
+
+.legend-box.marked {
+  background: var(--color-marked);
+  border-color: var(--color-marked);
+}
+
+.sheet-body {
+  padding: 16px;
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.sheet-group-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.grid-matrix {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+}
+
+.grid-btn {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #FFFFFF;
+  border: 1px solid #CBD5E1;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+  color: #334155;
+  position: relative;
+}
+
+.grid-btn:hover {
+  border-color: var(--primary-blue);
+  transform: scale(1.05);
+}
+
+.grid-btn.current {
+  outline: 2px solid var(--primary-blue);
+  outline-offset: 1px;
+}
+
+.grid-btn.answered {
+  background: var(--color-answered);
+  border-color: var(--color-answered);
+  color: #FFFFFF;
+}
+
+.grid-btn.marked {
+  background: var(--color-marked);
+  border-color: var(--color-marked);
+  color: #FFFFFF;
+}
+
+.grid-btn.marked::after {
+  content: '🚩';
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  font-size: 10px;
+}
+
+/* 悬浮机考计算器弹窗 */
+.calc-modal {
+  position: absolute;
+  top: 80px;
+  right: 360px;
+  width: 360px;
+  background: #FFFFFF;
+  border-radius: 8px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+  border: 1px solid #94A3B8;
+  z-index: 100;
+  display: none;
+  overflow: hidden;
+}
+
+.calc-header {
+  background: #334155;
+  color: #FFFFFF;
+  padding: 8px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: move;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.calc-close {
+  background: none;
+  border: none;
+  color: #94A3B8;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.calc-close:hover {
+  color: #FFFFFF;
+}
+
+.calc-body {
+  padding: 12px;
+  background: #F8FAFC;
+}
+
+.calc-display {
+  width: 100%;
+  height: 44px;
+  background: #FFFFFF;
+  border: 1px solid #CBD5E1;
+  border-radius: 6px;
+  font-size: 20px;
+  font-weight: 700;
+  text-align: right;
+  padding: 6px 12px;
+  margin-bottom: 10px;
+  color: #0F172A;
+}
+
+.tvm-panel {
+  background: #EEF2F6;
+  border: 1px solid #CBD5E1;
+  border-radius: 6px;
+  padding: 8px;
+  margin-bottom: 10px;
+}
+
+.tvm-status-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: #475569;
+  margin-bottom: 6px;
+}
+
+.tvm-status-col span {
+  font-weight: 700;
+  color: #1E40AF;
+}
+
+.tvm-controls {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 6px;
+  font-size: 11px;
+}
+
+.tvm-btn-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 4px;
+}
+
+.tvm-btn {
+  background: #1E3A8A;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 0;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.tvm-btn:hover {
+  background: #2563EB;
+}
+
+.calc-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+
+.calc-btn {
+  background: #FFFFFF;
+  border: 1px solid #CBD5E1;
+  border-radius: 4px;
+  padding: 10px 0;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.calc-btn:hover {
+  background: #F1F5F9;
+}
+
+.calc-btn.op {
+  background: #E2E8F0;
+  color: #1E293B;
+}
+
+.calc-btn.eval {
+  background: #2563EB;
+  color: #FFFFFF;
+  border-color: #1D4ED8;
+}
+
+/* 全屏模态框 (导入题库、查看报告) */
+.full-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(2px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-card {
+  background: #FFFFFF;
+  width: 700px;
+  max-width: 90vw;
+  max-height: 85vh;
+  border-radius: 8px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.modal-header {
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header h2 {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.modal-body {
+  padding: 24px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.modal-footer {
+  padding: 14px 24px;
+  border-top: 1px solid var(--border-color);
+  background: #F8FAFC;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
