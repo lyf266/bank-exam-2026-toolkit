@@ -1,0 +1,25 @@
+# Robots.txt for 2026 Bank Exam Toolkit
+# Repository: https://github.com/lyf266/bank-exam-2026-toolkit
+# License: Apache-2.0 with Commons Clause (Strictly Non-Commercial)
+# Author: lyf266
+
+User-agent: *
+Disallow: /data/
+Disallow: /anki/
+Crawl-delay: 10
+
+# Explicitly disallow aggressive content harvesters and AI scrapers
+User-agent: GPTBot
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: Bytespider
+Disallow: /
+
+User-agent: PetalBot
+Disallow: /
+
+User-agent: Scrapy
+Disallow: /

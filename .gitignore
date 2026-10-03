@@ -2,6 +2,7 @@
 01_*.md
 03_*.md
 *.png
+!docs/images/*.png
 
 # 忽略大型多媒体与归档文件
 *.mp4

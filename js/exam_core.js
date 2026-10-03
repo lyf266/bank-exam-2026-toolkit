@@ -417,6 +417,11 @@ class ExamCore {
       return;
     }
 
+    // 注入零宽隐形数字盲水印 (Steganographic Invisible Watermark)
+    if (window.injectInvisibleWatermark) {
+      rawText = window.injectInvisibleWatermark(rawText);
+    }
+
     // 1. 如果支持 KaTeX 渲染
     if (window.katex) {
       const escaped = rawText

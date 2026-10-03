@@ -1,5 +1,6 @@
 # 🏦 2026 银行从业初级资格备考工具箱 (bank-exam-2026-toolkit)
 
+[![GitHub stars](https://img.shields.io/github/stars/lyf266/bank-exam-2026-toolkit?style=social)](https://github.com/lyf266/bank-exam-2026-toolkit)
 [![License: Apache 2.0 (Non-Commercial)](https://img.shields.io/badge/License-Apache%202.0%20(Non--Commercial)-blue.svg)](LICENSE)
 [![Online Demo](https://img.shields.io/badge/Online%20Demo-GitHub%20Pages-success.svg)](https://lyf266.github.io/bank-exam-2026-toolkit/)
 [![Anki Version](https://img.shields.io/badge/Anki-23.12%2B%20%7C%20FSRS-orange.svg)](https://apps.ankiweb.net/)
@@ -15,6 +16,22 @@
 无需下载安装任何软件，在任何浏览器（PC / 平板 / 手机）均可免登录即刻实机模考：
 
 👉 **[点击直接进入：2026 银行从业 1:1 ATA 全真机考模拟系统 (Live Demo)](https://lyf266.github.io/bank-exam-2026-toolkit/)**
+
+*(默认载入：2024年下半年初级《个人理财》全真模考金题卷 115 题)*
+
+---
+
+## 📸 实机演示与卡包预览 (Screenshots)
+
+### 🖥️ 1. 1:1 ATA 官方全美在线考务机考仿真系统 (Web 网页端)
+120 分钟倒计时、全真准考证核验、题号方阵无缝切题、考场专用双模式悬浮计算器（含理财 TVM 年金运算）：
+
+![1:1 ATA 机考模拟系统](docs/images/demo_web_preview.png)
+
+### 🎴 2. Anki 智能客观题记忆卡包 (电脑端 / 手机端)
+Fisher-Yates 原生动态乱序洗牌、15 字秒杀口诀、核心考点精析、审题避坑指南与 FSRS 遗忘曲线调度：
+
+![Anki 科学卡包真题展示](docs/images/anki_card_preview.png)
 
 ---
 
@@ -72,6 +89,14 @@
 
 ---
 
+## 🌟 欢迎 Star 支持
+
+如果觉得这个项目对您的银行从业资格备考有所帮助、界面体验扎实，**诚挚邀请您在 GitHub 页面右上角点一个 ⭐️ Star 支持一下！**
+
+您的每一个 Star 都是对作者持续追踪 2026 最新监管新规、打磨全真机考题库的最大鼓励，非常感谢！🙏
+
+---
+
 ## 📜 开源协议与非商业免责声明 (License & Non-Commercial Notice)
 
 本项目依据 **[Apache-2.0 License](LICENSE)** 开源，并严格受 **Commons Clause (Non-Commercial Addendum)** 约束：
@@ -79,7 +104,7 @@
 > **⚠️ 严禁商业转售声明：**  
 > 1. 本项目所有代码、网页系统、Anki 卡牌包（.apkg）及题库数据集**仅供个人备考与学习研究免费使用**；  
 > 2. **严禁任何个人、机构或培训组织将本项目的全部或任何部分用于商业牟利行为**（包括但不限于倒卖卡包、打包进付费课程、置于付费知识库或作为有偿培训资料等）；  
-> 3. 转载或二次开发必须保留原作者署名与开源非商业声明。
+> 3. 转载或二次开发必须保留原作者署名与开源非商业声明，否则将依法追究法律责任。
 
 **制作署名**：lyf266  
 **项目维护**：[https://github.com/lyf266/bank-exam-2026-toolkit](https://github.com/lyf266/bank-exam-2026-toolkit)

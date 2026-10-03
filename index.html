@@ -3,11 +3,27 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="lyf266">
+  <meta name="copyright" content="lyf266 - Apache-2.0 with Commons Clause (Non-Commercial)">
+  <meta name="watermark-signature" content="lyf266::bank-exam-2026-toolkit::SHA256_FINGERPRINT">
+  <meta name="robots" content="index, follow">
+  <!-- 
+    [DIGITAL STEGANOGRAPHIC SIGNATURE]
+    Author: lyf266
+    Project: 2026 银行业专业人员初级职业资格备考工具箱
+    Repository: https://github.com/lyf266/bank-exam-2026-toolkit
+    License: Apache-2.0 License with Commons Clause (Strictly Non-Commercial)
+    Fingerprint: 6c79663236363a3a323032362d6362612d746f6f6c6b6974
+  -->
   <title>2026 银行业专业人员职业资格考试 · 1:1 全真机考模拟系统 (ATA仿真版)</title>
   <link rel="stylesheet" href="lib/katex/katex.min.css">
   <link rel="stylesheet" href="css/exam_theme.css">
 </head>
 <body>
+  <!-- 隐形版权溯源盲水印 (防盗与非法爬虫抓取取证) -->
+  <div id="_securityFingerprint" style="display:none!important;visibility:hidden!important;opacity:0!important;position:absolute!important;left:-9999px;top:-9999px;pointer-events:none;" aria-hidden="true" data-author="lyf266" data-license="Apache-2.0-NC" data-repo="https://github.com/lyf266/bank-exam-2026-toolkit">
+    2026 银行从业初级资格备考工具箱 · 著作权人: lyf266 · 依据 Apache-2.0 License (Commons Clause) 开源，严禁任何形式的商业转售、机构打包或爬虫盗取。数字指纹凭证: CBA2026-LYF266-AUTH-SEAL
+  </div>
 
   <!-- ==========================================================================
        顶部考务信息栏 (ATA 经典深蓝顶栏)
@@ -52,7 +68,7 @@
           <option value="2023_10_law">2023年下半年《法律法规》机考全真精选卷 (5题)</option>
         </optgroup>
         <optgroup label="💰 《个人理财》历年机考真题卷">
-          <option value="2024_10_finance">2024年下半年《个人理财》全真模考金题卷 (115题·满分)</option>
+          <option value="2024_10_finance" selected>2024年下半年《个人理财》全真模考金题卷 (115题·满分)</option>
           <option value="2024_06_finance">2024年06月《个人理财》全真机考真题卷 (114题·高频)</option>
           <option value="2025_06_finance">2025年上半年《个人理财》最新大纲密训卷 (5题)</option>
           <option value="2023_06_finance">2023年上半年《个人理财》机考回忆原题卷 (8题)</option>
@@ -478,6 +494,7 @@ D. 8%
        ========================================================================== -->
   <script src="lib/katex/katex.min.js"></script>
   <script src="lib/katex/auto-render.min.js"></script>
+  <script src="js/security.js"></script>
   <script src="js/presets.js"></script>
   <script src="js/past_papers.js"></script>
   <script src="js/calculator.js"></script>
@@ -510,8 +527,9 @@ D. 8%
 
       // 3. 初始化考务核心
       window.examCore = new ExamCore();
-      // 默认加载《银行业法律法规与综合能力》
-      window.examCore.loadPaper(PRESET_PAPERS.law_2026);
+      // 默认加载 2024年下半年初级《个人理财》全真模考金题卷 (115题·满分)
+      const defaultPaper = PRESET_PAPERS["2024_10_finance"] || PRESET_PAPERS.law_2026;
+      window.examCore.loadPaper(defaultPaper);
 
       // 4. 成绩单关闭事件
       document.getElementById("closeReportBtn").addEventListener("click", () => {
