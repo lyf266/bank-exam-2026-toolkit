@@ -50,21 +50,26 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 20px;
+  padding: 0 16px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   position: relative;
   z-index: 100;
+  flex-wrap: nowrap;
+  gap: 12px;
 }
 
 .header-left {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 10px;
+  min-width: 0;
+  flex-shrink: 1;
 }
 
 .cba-emblem {
-  width: 38px;
-  height: 38px;
+  width: 34px;
+  height: 34px;
+  min-width: 34px;
   background: #ffffff;
   border-radius: 50%;
   display: flex;
@@ -72,21 +77,30 @@ body {
   justify-content: center;
   color: var(--ata-navy);
   font-weight: 900;
-  font-size: 16px;
+  font-size: 15px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   border: 2px solid #ffd591;
 }
 
+.exam-title-group {
+  min-width: 0;
+}
+
 .exam-title-group h1 {
-  font-size: 17px;
+  font-size: 15px;
   font-weight: 700;
   letter-spacing: 0.5px;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 320px;
 }
 
 .exam-title-group .exam-subtitle {
-  font-size: 12px;
+  font-size: 11px;
   color: #d6e4ff;
+  white-space: nowrap;
 }
 
 .author-watermark-tag {
@@ -101,6 +115,16 @@ body {
   font-weight: 500;
   letter-spacing: 0.3px;
   white-space: nowrap;
+  text-decoration: none;
+  transition: all 0.2s;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.author-watermark-tag:hover {
+  background: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.45);
 }
 
 .footer-copyright-tag {
@@ -114,28 +138,37 @@ body {
   font-size: 11px;
   font-weight: 600;
   white-space: nowrap;
+  text-decoration: none;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.footer-copyright-tag:hover {
+  background: #d6e4ff;
+  color: #1d39c4;
 }
 
 .header-center {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 10px;
+  flex-shrink: 0;
 }
 
 .timer-badge {
   background: rgba(0, 0, 0, 0.3);
   border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 20px;
-  padding: 4px 16px;
+  padding: 3px 12px;
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 13px;
+  gap: 6px;
+  font-size: 12px;
 }
 
 .timer-digits {
   font-family: "Courier New", Courier, monospace, var(--font-main);
-  font-size: 20px;
+  font-size: 18px;
   font-weight: bold;
   color: #fffae6;
   letter-spacing: 1px;
@@ -153,7 +186,7 @@ body {
 
 .mode-badge {
   font-size: 12px;
-  padding: 3px 10px;
+  padding: 3px 8px;
   border-radius: 12px;
   background: #fa8c16;
   color: #ffffff;
@@ -163,22 +196,23 @@ body {
 .header-right {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 8px;
+  flex-shrink: 0;
 }
 
 .candidate-chip {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   background: rgba(255, 255, 255, 0.12);
-  padding: 4px 12px 4px 6px;
+  padding: 3px 10px 3px 5px;
   border-radius: 24px;
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .candidate-avatar {
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   background: #adc6ff;
   border: 1px solid #ffffff;
@@ -186,21 +220,21 @@ body {
   align-items: center;
   justify-content: center;
   color: #1d39c4;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: bold;
 }
 
 .candidate-meta {
-  line-height: 1.2;
+  line-height: 1.1;
 }
 
 .candidate-name {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
 }
 
 .candidate-seat {
-  font-size: 11px;
+  font-size: 10px;
   color: #d6e4ff;
 }
 
@@ -209,15 +243,17 @@ body {
   color: var(--ata-navy);
   border: none;
   border-radius: 4px;
-  padding: 6px 14px;
-  font-size: 13px;
+  padding: 5px 11px;
+  font-size: 12px;
   font-weight: 600;
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
   transition: all 0.2s;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  white-space: nowrap;
+  text-decoration: none;
 }
 
 .header-action-btn:hover {
@@ -233,6 +269,24 @@ body {
 
 .header-action-btn.submit-btn:hover {
   background: #cf1322;
+}
+
+.header-action-btn.github-btn {
+  background: #24292f;
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  text-decoration: none;
+}
+
+.header-action-btn.github-btn:hover {
+  background: #0969da;
+  color: #ffffff;
+  border-color: #0969da;
+  transform: translateY(-1px);
+}
+
+.header-action-btn.github-btn svg {
+  display: block;
 }
 
 /* 主考场工作区双栏布局 */

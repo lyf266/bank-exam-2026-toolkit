@@ -19,9 +19,9 @@
         <h1 id="examHeaderTitle">2026 银行业专业人员初级职业资格考试</h1>
         <div class="exam-subtitle" id="examHeaderSubtitle">全美在线 (ATA) 全真考务机考模拟平台</div>
       </div>
-      <div class="author-watermark-tag" title="本项目严格开源非商业使用">
+      <a href="https://github.com/lyf266/bank-exam-2026-toolkit" target="_blank" rel="noopener noreferrer" class="author-watermark-tag" title="本项目严格开源非商业使用 · 点击访问 GitHub 仓库">
         <span>© 制作: lyf266 | 严禁商用</span>
-      </div>
+      </a>
     </div>
 
     <div class="header-center">
@@ -34,7 +34,7 @@
 
     <div class="header-right">
       <!-- 科目切换下拉框 -->
-      <select id="paperSelect" style="padding: 5px 10px; border-radius: 4px; border: 1px solid #d9d9d9; font-size: 13px; background: #ffffff; color: #164675; font-weight: 600; max-width: 320px; outline: none; cursor: pointer;">
+      <select id="paperSelect" style="padding: 5px 8px; border-radius: 4px; border: 1px solid #d9d9d9; font-size: 12px; background: #ffffff; color: #164675; font-weight: 600; max-width: 220px; text-overflow: ellipsis; outline: none; cursor: pointer;">
         <optgroup label="🔥 2025年10月最新机考回忆卷 (新增)">
           <option value="2025_10_law">2025年10月《法律法规》最新机考回忆卷 (30题·上午+下午场)</option>
           <option value="2025_10_finance">2025年10月《个人理财》最新机考回忆卷 (13题·先付年金/养老)</option>
@@ -71,6 +71,13 @@
       <button class="header-action-btn" id="fullscreenBtn" title="快捷键: F11">
         <span>⛶</span> 全屏考场
       </button>
+
+      <a href="https://github.com/lyf266/bank-exam-2026-toolkit" target="_blank" rel="noopener noreferrer" class="header-action-btn github-btn" title="访问 GitHub 开源项目仓库 (获取 Anki 卡包与源码)">
+        <svg height="15" width="15" viewBox="0 0 16 16" fill="currentColor">
+          <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
+        </svg>
+        <span>GitHub</span>
+      </a>
 
       <div class="candidate-chip">
         <div class="candidate-avatar">考</div>
@@ -169,7 +176,9 @@
 
         <div class="footer-right" style="display: flex; align-items: center; gap: 14px;">
           <span style="font-size: 12px; color: #8c9ba5;">快捷键：[←/→]切题 | [A-E]选答案 | [M]标记 | [Alt+C]计算器</span>
-          <span class="footer-copyright-tag">制作: lyf266 | 仅供个人备考，严禁商用 (Apache-2.0)</span>
+          <a href="https://github.com/lyf266/bank-exam-2026-toolkit" target="_blank" rel="noopener noreferrer" class="footer-copyright-tag" title="点击访问 GitHub 项目仓库">
+            <span>制作: lyf266 | 仅供个人备考，严禁商用 (Apache-2.0) · GitHub ↗</span>
+          </a>
         </div>
       </footer>
     </section>
@@ -334,10 +343,17 @@
             <li>系统内置【标准科学计算器】与【理财专向 TVM 计算器】，可通过屏幕上方按钮随时调用。</li>
             <li>试卷包含单选题、多选题和判断题。多选题多选、少选、错选均不得分。</li>
             <li>按 F11 可进入全屏真实考场环境；答题过程中可通过左侧方阵自由切换题号或标记重点。</li>
+            <li>本项目已开源，支持免安装在线机考与配套 710 题 Anki 科学卡包同步复习。</li>
           </ol>
         </div>
       </div>
-      <div class="modal-footer">
+      <div class="modal-footer" style="display: flex; justify-content: space-between; align-items: center;">
+        <a href="https://github.com/lyf266/bank-exam-2026-toolkit" target="_blank" rel="noopener noreferrer" style="font-size: 13px; color: #164675; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; font-weight: 600;">
+          <svg height="16" width="16" viewBox="0 0 16 16" fill="currentColor">
+            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
+          </svg>
+          <span>GitHub 项目仓库 ↗</span>
+        </a>
         <button class="nav-btn primary" id="startExamBtn" style="padding: 10px 32px; font-size: 15px;">
           确认信息无误 · 进入考场开始答题
         </button>
@@ -445,7 +461,10 @@ D. 8%
         </div>
       </div>
       <div class="modal-footer" style="display: flex; justify-content: space-between; align-items: center;">
-        <span style="font-size: 12px; color: var(--text-muted);">🎴 2026 银行从业初级 · 制作: lyf266 | 仅供个人备考，严禁商用 (Apache-2.0)</span>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 12px; color: var(--text-muted);">🎴 2026 银行从业初级 · 制作: lyf266 | 仅供个人备考，严禁商用 (Apache-2.0)</span>
+          <a href="https://github.com/lyf266/bank-exam-2026-toolkit" target="_blank" rel="noopener noreferrer" style="font-size: 12px; color: var(--ata-blue); text-decoration: underline; font-weight: 600;">GitHub 项目仓库 ↗</a>
+        </div>
         <button class="nav-btn primary" id="closeReportBtn" style="padding: 8px 24px;">
           进入错题与考点逐题复盘
         </button>
