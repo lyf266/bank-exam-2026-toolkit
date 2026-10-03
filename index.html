@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="author" content="lyf266">
   <meta name="copyright" content="lyf266 - Apache-2.0 with Commons Clause (Non-Commercial)">
   <meta name="watermark-signature" content="lyf266::bank-exam-2026-toolkit::SHA256_FINGERPRINT">
@@ -30,27 +30,27 @@
        ========================================================================== -->
   <header class="exam-header">
     <div class="header-left">
-      <div class="cba-emblem">银</div>
+      <div class="cba-emblem desktop-only">银</div>
       <div class="exam-title-group">
         <h1 id="examHeaderTitle">2026 银行业专业人员初级职业资格考试</h1>
-        <div class="exam-subtitle" id="examHeaderSubtitle">全美在线 (ATA) 全真考务机考模拟平台</div>
+        <div class="exam-subtitle desktop-only" id="examHeaderSubtitle">全美在线 (ATA) 全真考务机考模拟平台</div>
       </div>
-      <a href="https://github.com/lyf266/bank-exam-2026-toolkit" target="_blank" rel="noopener noreferrer" class="author-watermark-tag" title="本项目严格开源非商业使用 · 点击访问 GitHub 仓库">
+      <a href="https://github.com/lyf266/bank-exam-2026-toolkit" target="_blank" rel="noopener noreferrer" class="author-watermark-tag desktop-only" title="本项目严格开源非商业使用 · 点击访问 GitHub 仓库">
         <span>© 制作: lyf266 | 严禁商用</span>
       </a>
     </div>
 
     <div class="header-center">
       <div class="timer-badge">
-        <span>⏱️ 剩余时间</span>
+        <span>⏱️</span>
         <span class="timer-digits" id="examTimer">02:00:00</span>
       </div>
-      <button class="mode-badge" id="modeToggleBtn" title="点击切换模考与背题模式" style="border:none; cursor:pointer;">全真模考</button>
+      <button class="mode-badge desktop-only" id="modeToggleBtn" title="点击切换模考与背题模式" style="border:none; cursor:pointer;">全真模考</button>
     </div>
 
     <div class="header-right">
       <!-- 科目切换下拉框 -->
-      <select id="paperSelect" style="padding: 5px 8px; border-radius: 4px; border: 1px solid #d9d9d9; font-size: 12px; background: #ffffff; color: #164675; font-weight: 600; max-width: 220px; text-overflow: ellipsis; outline: none; cursor: pointer;">
+      <select id="paperSelect" class="header-paper-select" style="padding: 5px 8px; border-radius: 4px; border: 1px solid #d9d9d9; font-size: 12px; background: #ffffff; color: #164675; font-weight: 600; max-width: 220px; text-overflow: ellipsis; outline: none; cursor: pointer;">
         <optgroup label="🔥 2025年10月最新机考回忆卷 (新增)">
           <option value="2025_10_law">2025年10月《法律法规》最新机考回忆卷 (30题·上午+下午场)</option>
           <option value="2025_10_finance">2025年10月《个人理财》最新机考回忆卷 (13题·先付年金/养老)</option>
@@ -76,26 +76,30 @@
         </optgroup>
       </select>
 
-      <button class="header-action-btn" id="btnOpenCalc" title="快捷键: Alt + C">
-        <span>🧮</span> 考试计算器
+      <button class="header-action-btn" id="btnOpenCalc" title="考试计算器 (Alt + C)">
+        <span>🧮</span> <span class="desktop-only">考试计算器</span>
       </button>
 
-      <button class="header-action-btn" id="btnOpenImport">
+      <button class="header-action-btn mobile-drawer-btn" id="btnToggleDrawer" title="查看题号方阵">
+        <span>📋</span> <span>题号</span>
+      </button>
+
+      <button class="header-action-btn desktop-only" id="btnOpenImport">
         <span>📥</span> 导入试题
       </button>
 
-      <button class="header-action-btn" id="fullscreenBtn" title="快捷键: F11">
+      <button class="header-action-btn desktop-only" id="fullscreenBtn" title="快捷键: F11">
         <span>⛶</span> 全屏考场
       </button>
 
-      <a href="https://github.com/lyf266/bank-exam-2026-toolkit" target="_blank" rel="noopener noreferrer" class="header-action-btn github-btn" title="访问 GitHub 开源项目仓库 (获取 Anki 卡包与源码)">
+      <a href="https://github.com/lyf266/bank-exam-2026-toolkit" target="_blank" rel="noopener noreferrer" class="header-action-btn github-btn desktop-only" title="访问 GitHub 开源项目仓库 (获取 Anki 卡包与源码)">
         <svg height="15" width="15" viewBox="0 0 16 16" fill="currentColor">
           <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
         </svg>
         <span>GitHub</span>
       </a>
 
-      <div class="candidate-chip">
+      <div class="candidate-chip desktop-only">
         <div class="candidate-avatar">考</div>
         <div class="candidate-meta">
           <div class="candidate-name" id="headerCandidateName">张明远</div>
@@ -103,7 +107,7 @@
         </div>
       </div>
 
-      <button class="header-action-btn submit-btn" id="headerSubmitBtn">
+      <button class="header-action-btn submit-btn desktop-only" id="headerSubmitBtn">
         <span>📝</span> 提交试卷
       </button>
     </div>
@@ -113,10 +117,16 @@
        主考场工作区 (左侧题号矩阵 + 右侧作答区)
        ========================================================================== -->
   <main class="exam-layout">
-    <!-- 左侧试题结构与导航 -->
-    <aside class="exam-sidebar">
+    <!-- 移动端题号抽屉全屏半透明遮罩 -->
+    <div class="drawer-backdrop" id="drawerBackdrop"></div>
+
+    <!-- 左侧试题结构与导航 (移动端自适应为底部滑出抽屉) -->
+    <aside class="exam-sidebar" id="examSidebar">
       <div class="sidebar-header">
-        <div class="sidebar-title">📋 试题列表与作答进度</div>
+        <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+          <div class="sidebar-title">📋 试题列表与作答进度</div>
+          <button class="drawer-close-btn" id="btnCloseDrawer" title="收起题号抽屉">✕</button>
+        </div>
         <div class="status-legend">
           <div class="legend-item">
             <div class="legend-swatch unanswered"></div>
@@ -181,18 +191,24 @@
       <footer class="exam-footer">
         <div class="footer-left">
           <button class="flag-btn" id="btnFlagQ" title="快捷键: M">
-            <span>🚩</span> <span id="flagBtnText">标记本题</span>
+            <span>🚩</span> <span id="flagBtnText">标记</span>
           </button>
         </div>
 
         <div class="footer-center">
           <button class="nav-btn" id="btnPrevQ" title="快捷键: ← 方向键">上一题</button>
+          <button class="mobile-grid-btn" id="btnMobileGrid" title="打开题号抽屉">
+            <span>📋</span> <span id="mobileQIndicator">1 / 115</span>
+          </button>
           <button class="nav-btn primary" id="btnNextQ" title="快捷键: → 方向键">下一题</button>
         </div>
 
-        <div class="footer-right" style="display: flex; align-items: center; gap: 14px;">
-          <span style="font-size: 12px; color: #8c9ba5;">快捷键：[←/→]切题 | [A-E]选答案 | [M]标记 | [Alt+C]计算器</span>
-          <a href="https://github.com/lyf266/bank-exam-2026-toolkit" target="_blank" rel="noopener noreferrer" class="footer-copyright-tag" title="点击访问 GitHub 项目仓库">
+        <div class="footer-right">
+          <button class="header-action-btn submit-btn mobile-submit-btn" id="footerSubmitBtn" title="交卷并查看考生成绩单">
+            <span>📝</span> <span>交卷</span>
+          </button>
+          <span class="desktop-only footer-shortcuts" style="font-size: 12px; color: #8c9ba5;">快捷键：[←/→]切题 | [A-E]选答案 | [M]标记 | [Alt+C]计算器</span>
+          <a href="https://github.com/lyf266/bank-exam-2026-toolkit" target="_blank" rel="noopener noreferrer" class="footer-copyright-tag desktop-only" title="点击访问 GitHub 项目仓库">
             <span>制作: lyf266 | 仅供个人备考，严禁商用 (Apache-2.0) · GitHub ↗</span>
           </a>
         </div>
@@ -205,7 +221,7 @@
        ========================================================================== -->
   <div class="calc-window" id="calcWindow">
     <div class="calc-header" id="calcHeader">
-      <span>🧮 银行业考试专用计算器 (可按住拖拽)</span>
+      <span>🧮 银行业考试专用计算器 <span class="desktop-only">(可按住拖拽)</span></span>
       <div class="calc-header-controls">
         <button class="calc-ctrl-btn" id="calcCloseBtn" title="关闭计算器">✕</button>
       </div>

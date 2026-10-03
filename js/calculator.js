@@ -27,7 +27,7 @@ class ExamCalculator {
     this.initEvents();
   }
 
-  // 1. 窗口拖拽与边界碰撞检测
+  // 1. 窗口拖拽与边界碰撞检测 (仅桌面端启用)
   initDrag() {
     if (!this.header || !this.win) return;
     let isDragging = false;
@@ -35,6 +35,7 @@ class ExamCalculator {
     let origLeft = 0, origTop = 0;
 
     this.header.addEventListener("mousedown", (e) => {
+      if (window.innerWidth <= 768) return;
       if (e.target.closest(".calc-ctrl-btn")) return;
       isDragging = true;
       startX = e.clientX;
@@ -131,6 +132,11 @@ class ExamCalculator {
   }
 
   show() {
+    if (window.innerWidth <= 768 && this.win) {
+      this.win.style.left = "";
+      this.win.style.top = "";
+      this.win.style.right = "";
+    }
     this.win.classList.add("active");
   }
 

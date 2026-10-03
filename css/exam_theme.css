@@ -1254,13 +1254,456 @@ body {
   color: var(--ata-navy);
 }
 
-/* 响应式微调 */
-@media (max-width: 900px) {
+/* ==========================================================================
+   响应式与移动端全分辨率自适应规范 (Mobile & Responsive Adaptation)
+   ========================================================================== */
+
+/* 桌面端默认隐藏的移动端专属控件 */
+.mobile-drawer-btn,
+.mobile-grid-btn,
+.drawer-close-btn,
+.drawer-backdrop,
+.mobile-submit-btn {
+  display: none;
+}
+
+/* 抽屉关闭按钮基本样式 */
+.drawer-close-btn {
+  background: rgba(0, 0, 0, 0.06);
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-size: 16px;
+  font-weight: bold;
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.drawer-close-btn:hover {
+  background: rgba(0, 0, 0, 0.12);
+  color: #000;
+}
+
+/* 移动端题号指标胶囊按钮 */
+.mobile-grid-btn {
+  background: #f0f5ff;
+  border: 1px solid #adc6ff;
+  color: #1d39c4;
+  padding: 6px 14px;
+  border-radius: 16px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s;
+}
+
+.mobile-grid-btn:active {
+  background: #d6e4ff;
+  transform: scale(0.96);
+}
+
+/* ==========================================================================
+   平板与窄屏过渡：屏幕宽度 <= 900px
+   ========================================================================== */
+@media (max-width: 900px) and (min-width: 769px) {
   .exam-sidebar {
     width: 260px;
     min-width: 260px;
   }
   .q-grid {
     grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* ==========================================================================
+   移动端断点：屏幕宽度 <= 768px (手机端主流分辨率)
+   ========================================================================== */
+@media (max-width: 768px) {
+  /* 隐藏桌面端多余复杂元素 */
+  .desktop-only {
+    display: none !important;
+  }
+
+  /* 显示移动端专属控件 */
+  .mobile-drawer-btn {
+    display: inline-flex !important;
+    background: #1890ff !important;
+    color: #ffffff !important;
+    padding: 5px 10px !important;
+    font-size: 12px !important;
+  }
+
+  .mobile-grid-btn {
+    display: inline-flex !important;
+  }
+
+  .drawer-close-btn {
+    display: flex !important;
+  }
+
+  .mobile-submit-btn {
+    display: inline-flex !important;
+    padding: 6px 12px !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+  }
+
+  /* 顶栏响应式紧凑排版 */
+  .exam-header {
+    height: 52px;
+    padding: 0 10px;
+    gap: 8px;
+  }
+
+  .header-left {
+    gap: 6px;
+  }
+
+  .exam-title-group h1 {
+    font-size: 13px;
+    max-width: 130px;
+  }
+
+  .header-center {
+    gap: 6px;
+  }
+
+  .timer-badge {
+    padding: 3px 8px;
+    font-size: 11px;
+    gap: 4px;
+  }
+
+  .timer-digits {
+    font-size: 15px;
+  }
+
+  .header-right {
+    gap: 6px;
+  }
+
+  .header-paper-select {
+    max-width: 115px !important;
+    font-size: 11px !important;
+    padding: 4px 6px !important;
+  }
+
+  /* 主布局流式满宽 */
+  body {
+    overflow-y: auto !important;
+    height: 100%;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .exam-layout {
+    display: block;
+    height: auto;
+    min-height: calc(100vh - 52px);
+    position: relative;
+    padding-bottom: 70px; /* 留出底部常驻操作栏高度 */
+  }
+
+  /* 抽屉全屏半透明遮罩 */
+  .drawer-backdrop {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.55);
+    z-index: 999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s cubic-bezier(0.2, 0.9, 0.3, 1);
+    backdrop-filter: blur(2px);
+  }
+
+  .drawer-backdrop.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* 题号方阵重构为底部平滑滑出抽屉 (Bottom Drawer) */
+  .exam-sidebar {
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    min-width: 100% !important;
+    height: 78vh !important;
+    max-height: 80vh !important;
+    border-radius: 20px 20px 0 0 !important;
+    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.35) !important;
+    z-index: 1000 !important;
+    transform: translateY(100%) !important;
+    transition: transform 0.32s cubic-bezier(0.2, 0.9, 0.3, 1) !important;
+    background: #ffffff !important;
+    display: flex !important;
+    flex-direction: column !important;
+    border-right: none !important;
+    border-top: 1px solid rgba(0, 0, 0, 0.1) !important;
+  }
+
+  .exam-sidebar.open {
+    transform: translateY(0) !important;
+  }
+
+  .sidebar-header {
+    padding: 14px 16px 10px 16px;
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  .sidebar-content {
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 12px 14px 24px 14px;
+  }
+
+  .q-grid {
+    grid-template-columns: repeat(5, 1fr) !important;
+    gap: 8px !important;
+  }
+
+  .q-grid-btn {
+    height: 38px !important;
+    font-size: 14px !important;
+    border-radius: 6px !important;
+  }
+
+  /* 主答题中心 100% 满宽与触控优化 */
+  .exam-main {
+    padding: 14px 12px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .q-container {
+    padding: 16px 14px;
+    border-radius: 10px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+    margin-bottom: 20px;
+  }
+
+  .q-meta-bar {
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+    font-size: 12px;
+  }
+
+  .q-stem {
+    font-size: 16px !important;
+    line-height: 1.65 !important;
+    font-weight: 500;
+    margin-bottom: 18px !important;
+    word-break: break-word;
+  }
+
+  .q-options-list {
+    gap: 10px;
+  }
+
+  .option-item {
+    min-height: 48px; /* 满足触摸屏防误触触控标准 */
+    padding: 12px 14px;
+    font-size: 15px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    line-height: 1.45;
+  }
+
+  .option-label {
+    font-size: 15px;
+    min-width: 24px;
+    font-weight: 700;
+  }
+
+  .option-text {
+    font-size: 15px;
+    word-break: break-word;
+  }
+
+  /* 底部固定考务操作栏 */
+  .exam-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 56px;
+    background: #ffffff;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.08);
+    border-top: 1px solid #e8e8e8;
+    z-index: 900;
+    padding: 0 8px;
+    justify-content: space-between;
+    box-sizing: border-box;
+  }
+
+  .footer-left {
+    min-width: 44px;
+  }
+
+  .flag-btn {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+
+  .footer-center {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .nav-btn {
+    padding: 8px 12px;
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: 6px;
+  }
+
+  .footer-right {
+    min-width: 44px;
+    gap: 0;
+  }
+
+  /* 考场计算器移动端 Bottom Sheet 模式 */
+  .calc-window {
+    position: fixed !important;
+    left: 0 !important;
+    right: 0 !important;
+    top: auto !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    border-radius: 20px 20px 0 0 !important;
+    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.45) !important;
+    z-index: 1005 !important;
+    transform: translateY(100%);
+    transition: transform 0.32s cubic-bezier(0.2, 0.9, 0.3, 1);
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .calc-window.active {
+    transform: translateY(0);
+  }
+
+  .calc-header {
+    padding: 12px 16px;
+    border-radius: 20px 20px 0 0;
+    cursor: default !important;
+  }
+
+  .calc-tabs {
+    padding: 8px 12px;
+  }
+
+  .calc-tab-btn {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+
+  .calc-body {
+    padding: 12px 14px 20px 14px;
+    overflow-y: auto;
+  }
+
+  .calc-key {
+    height: 46px !important;
+    font-size: 16px !important;
+    border-radius: 8px !important;
+  }
+
+  /* 模态弹窗移动端流式适配 (准考证/导入/成绩单) */
+  .modal-overlay {
+    padding: 10px;
+    align-items: flex-end; /* 手机端贴近底部更容易单手点击 */
+  }
+
+  .modal-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    border-radius: 16px 16px 0 0 !important;
+    max-height: 90vh !important;
+    padding: 18px 16px !important;
+    box-sizing: border-box;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .modal-header h2 {
+    font-size: 15px !important;
+  }
+
+  .ticket-table th,
+  .ticket-table td {
+    padding: 6px 8px !important;
+    font-size: 12px !important;
+  }
+
+  .ticket-photo-box {
+    display: none !important; /* 手机小屏隐藏考场核验大头像，腾出阅读空间 */
+  }
+
+  .exam-rules-box {
+    padding: 10px 12px !important;
+    font-size: 12px !important;
+  }
+
+  .modal-footer {
+    flex-direction: column-reverse;
+    gap: 10px;
+    align-items: stretch !important;
+  }
+
+  .modal-footer button,
+  .modal-footer a {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+    padding: 10px !important;
+    font-size: 13px !important;
+  }
+
+  /* 成绩单 4 宫格自适应为 2x2 网格 */
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+  }
+}
+
+/* ==========================================================================
+   超窄小屏极限适配：屏幕宽度 <= 400px (如 iPhone SE / 迷你安卓)
+   ========================================================================== */
+@media (max-width: 400px) {
+  .exam-title-group h1 {
+    max-width: 100px;
+    font-size: 12px;
+  }
+
+  .header-paper-select {
+    max-width: 90px !important;
+    font-size: 10px !important;
+  }
+
+  .nav-btn {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+
+  .mobile-grid-btn {
+    padding: 5px 8px;
+    font-size: 11px;
   }
 }

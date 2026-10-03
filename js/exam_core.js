@@ -49,12 +49,61 @@ class ExamCore {
       });
     }
 
-    // 绑定交卷按钮
+    // 绑定交卷按钮 (PC 顶栏 + 移动端底栏)
     const submitBtn = document.getElementById("headerSubmitBtn");
     if (submitBtn) {
       submitBtn.addEventListener("click", () => {
         this.promptSubmit();
       });
+    }
+    const footerSubmitBtn = document.getElementById("footerSubmitBtn");
+    if (footerSubmitBtn) {
+      footerSubmitBtn.addEventListener("click", () => {
+        this.promptSubmit();
+      });
+    }
+
+    // 移动端题号抽屉控制 (Drawer Sheet)
+    const sidebar = document.getElementById("examSidebar");
+    const backdrop = document.getElementById("drawerBackdrop");
+    const openDrawer = () => {
+      if (sidebar) sidebar.classList.add("open");
+      if (backdrop) backdrop.classList.add("active");
+    };
+    const closeDrawer = () => {
+      if (sidebar) sidebar.classList.remove("open");
+      if (backdrop) backdrop.classList.remove("active");
+    };
+    this.closeDrawer = closeDrawer;
+
+    const toggleDrawerBtn = document.getElementById("btnToggleDrawer");
+    if (toggleDrawerBtn) {
+      toggleDrawerBtn.addEventListener("click", () => {
+        if (sidebar && sidebar.classList.contains("open")) {
+          closeDrawer();
+        } else {
+          openDrawer();
+        }
+      });
+    }
+
+    const mobileGridBtn = document.getElementById("btnMobileGrid");
+    if (mobileGridBtn) {
+      mobileGridBtn.addEventListener("click", () => {
+        if (sidebar && sidebar.classList.contains("open")) {
+          closeDrawer();
+        } else {
+          openDrawer();
+        }
+      });
+    }
+
+    const closeDrawerBtn = document.getElementById("btnCloseDrawer");
+    if (closeDrawerBtn) {
+      closeDrawerBtn.addEventListener("click", closeDrawer);
+    }
+    if (backdrop) {
+      backdrop.addEventListener("click", closeDrawer);
     }
 
     // 模式切换按钮
@@ -263,6 +312,9 @@ class ExamCore {
         box.textContent = idx + 1;
         box.addEventListener("click", () => {
           this.goToQuestion(idx);
+          if (window.innerWidth <= 768 && this.closeDrawer) {
+            this.closeDrawer();
+          }
         });
         gridEl.appendChild(box);
       });
@@ -317,6 +369,10 @@ class ExamCore {
     }
 
     document.getElementById("qNumberIndicator").textContent = `第 ${this.currentIndex + 1} 题 / 共 ${this.currentPaper.questions.length} 题`;
+    const mobInd = document.getElementById("mobileQIndicator");
+    if (mobInd) {
+      mobInd.textContent = `${this.currentIndex + 1} / ${this.currentPaper.questions.length}`;
+    }
     document.getElementById("qScoreIndicator").textContent = `本题分值: ${q.score} 分`;
 
     // 题干 (支持 KaTeX 与公式美化)
