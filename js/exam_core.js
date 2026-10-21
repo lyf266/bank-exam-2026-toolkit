@@ -169,6 +169,9 @@ class ExamCore {
       } else if (e.key.toLowerCase() === "m") {
         e.preventDefault();
         this.toggleFlagCurrent();
+      } else if (e.key.toLowerCase() === "t" && !e.ctrlKey && !e.metaKey) {
+        e.preventDefault();
+        if (window.examCoeff) window.examCoeff.toggle();
       } else if (["a", "b", "c", "d", "e"].includes(e.key.toLowerCase())) {
         const letter = e.key.toUpperCase();
         this.handleOptionSelect(letter);

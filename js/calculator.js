@@ -120,12 +120,44 @@ class ExamCalculator {
       });
     }
 
-    // 快捷键 Alt+C 呼出/隐藏计算器
+    // 物理键盘输入监听与快捷键
     if (typeof document !== "undefined" && document.addEventListener) {
       document.addEventListener("keydown", (e) => {
+        // Alt+C 呼出/隐藏计算器
         if (e.altKey && e.code === "KeyC") {
           e.preventDefault();
           this.toggle();
+          return;
+        }
+
+        // 仅在计算器窗口打开时响应物理键盘输入
+        if (!this.win || !this.win.classList.contains("active")) return;
+
+        // 若焦点在文本框输入区（例如 TVM 输入框），不拦截正常输入
+        if (e.target && ["INPUT", "TEXTAREA"].includes(e.target.tagName)) return;
+
+        // 科学计算模式物理键盘支持
+        if (this.activeTab === "sci") {
+          const key = e.key;
+          if (key >= "0" && key <= "9") {
+            e.preventDefault();
+            this.handleSciKey("digit", key);
+          } else if (key === ".") {
+            e.preventDefault();
+            this.handleSciKey("dot", ".");
+          } else if (key === "+" || key === "-" || key === "*" || key === "/") {
+            e.preventDefault();
+            this.handleSciKey("op", key);
+          } else if (key === "Enter" || key === "=") {
+            e.preventDefault();
+            this.handleSciKey("equal");
+          } else if (key === "Backspace") {
+            e.preventDefault();
+            this.handleSciKey("backspace");
+          } else if (key === "Escape" || key === "c" || key === "C") {
+            e.preventDefault();
+            this.handleSciKey("clear");
+          }
         }
       });
     }

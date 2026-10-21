@@ -1002,6 +1002,343 @@ body {
 }
 
 /* ==========================================================================
+   官方全真机考专用四大系数表 (ATA 浮动窗口 · 支持拖拽与快速检索)
+   ========================================================================== */
+.coeff-window {
+  position: absolute;
+  top: 85px;
+  right: 50px;
+  width: 780px;
+  max-width: 95vw;
+  height: 600px;
+  max-height: 85vh;
+  background: #ffffff;
+  border: 1px solid #c0c6cf;
+  border-radius: 8px;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.28);
+  z-index: 1002;
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+  user-select: none;
+  font-family: var(--font-family, "Source Han Sans SC", "Noto Sans CJK SC", "Noto Sans SC", sans-serif);
+}
+
+.coeff-window.active {
+  display: flex;
+}
+
+.coeff-window.maximized {
+  top: 55px !important;
+  left: 20px !important;
+  right: 20px !important;
+  bottom: 20px !important;
+  width: calc(100vw - 40px) !important;
+  height: calc(100vh - 75px) !important;
+  max-width: none !important;
+  max-height: none !important;
+  border-radius: 8px !important;
+}
+
+.coeff-header {
+  height: 38px;
+  background: linear-gradient(180deg, #1f4a7a 0%, #153860 100%);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 14px;
+  cursor: move;
+  font-weight: 600;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+
+.coeff-header-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.coeff-header-sub {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: normal;
+}
+
+.coeff-header-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.coeff-ctrl-btn {
+  background: transparent;
+  border: none;
+  color: #ffffff;
+  font-size: 13px;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.coeff-ctrl-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.coeff-quick-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 14px;
+  background: #f8fafc;
+  border-bottom: 1px solid #e2e8f0;
+  gap: 12px;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+}
+
+.coeff-quick-inputs {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.coeff-quick-field {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #334155;
+}
+
+.coeff-quick-field input {
+  width: 65px;
+  padding: 3px 6px;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  font-size: 12px;
+  font-family: inherit;
+  background: #ffffff;
+  color: #0f172a;
+  outline: none;
+}
+
+.coeff-quick-field input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+.coeff-quick-badges {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.coeff-badge {
+  background: #eff6ff;
+  border: 1px solid rgba(59, 130, 246, 0.25);
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  color: #1e40af;
+}
+
+.coeff-badge strong {
+  color: #2563eb;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 12px;
+}
+
+.coeff-tabs {
+  display: flex;
+  background: #f1f5f9;
+  border-bottom: 1px solid #cbd5e1;
+  overflow-x: auto;
+  flex-shrink: 0;
+}
+
+.coeff-tab-btn {
+  padding: 8px 14px;
+  border: none;
+  background: transparent;
+  font-size: 12px;
+  font-weight: 600;
+  color: #64748b;
+  cursor: pointer;
+  white-space: nowrap;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.coeff-tab-btn:hover {
+  color: #164675;
+}
+
+.coeff-tab-btn.active {
+  background: #ffffff;
+  color: #164675;
+  border-bottom-color: #164675;
+}
+
+.coeff-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: #ffffff;
+  position: relative;
+}
+
+.coeff-tab-pane {
+  display: none;
+  flex: 1;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 10px 12px;
+}
+
+.coeff-tab-pane.active {
+  display: flex;
+}
+
+.coeff-pane-desc {
+  font-size: 12px;
+  background: #f8fafc;
+  border-left: 3px solid #164675;
+  padding: 5px 10px;
+  border-radius: 0 4px 4px 0;
+  margin-bottom: 8px;
+  color: #334155;
+  flex-shrink: 0;
+}
+
+.coeff-table-wrap {
+  flex: 1;
+  overflow: auto;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+}
+
+table.coeff-data-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 12px;
+  text-align: right;
+}
+
+table.coeff-data-table th, table.coeff-data-table td {
+  padding: 5px 9px;
+  border-bottom: 1px solid #e2e8f0;
+  border-right: 1px solid #e2e8f0;
+  white-space: nowrap;
+}
+
+table.coeff-data-table th {
+  background: #f1f5f9;
+  color: #164675;
+  font-weight: 700;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+table.coeff-data-table .col-period-sticky {
+  position: sticky;
+  left: 0;
+  background: #ffffff;
+  z-index: 5;
+  text-align: center;
+  font-weight: 600;
+  color: #334155;
+  width: 75px;
+}
+
+table.coeff-data-table th.col-period-sticky {
+  z-index: 15;
+  background: #f1f5f9;
+}
+
+table.coeff-data-table tr:hover td {
+  background-color: rgba(59, 130, 246, 0.05);
+}
+
+table.coeff-data-table tr.highlight-row td.col-period-sticky {
+  background-color: #fef3c7;
+  color: #b45309;
+  font-weight: 700;
+}
+
+table.coeff-data-table td.highlight-cell {
+  background-color: #fde68a !important;
+  font-weight: 700;
+  color: #b45309;
+}
+
+.coeff-rules-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 12px;
+  overflow-y: auto;
+  padding: 4px;
+}
+
+.coeff-rule-box {
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 12px 14px;
+  background: #f8fafc;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.coeff-rule-title {
+  font-weight: 700;
+  color: #164675;
+  margin-bottom: 6px;
+  font-size: 13px;
+}
+
+.coeff-mnemonic {
+  margin-top: 8px;
+  padding: 4px 8px;
+  background: rgba(217, 119, 6, 0.1);
+  border-left: 3px solid #d97706;
+  color: #b45309;
+  font-weight: 600;
+  border-radius: 0 4px 4px 0;
+}
+
+/* 题目元信息栏内专属系数表按钮 */
+.q-coeff-btn {
+  background: rgba(22, 70, 117, 0.08);
+  border: 1px solid rgba(22, 70, 117, 0.25);
+  color: var(--ata-blue);
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.q-coeff-btn:hover {
+  background: var(--ata-blue);
+  color: #ffffff;
+}
+
+/* ==========================================================================
    模态框系统 (考前核验、试题导入、交卷报告)
    ========================================================================== */
 .modal-overlay {
@@ -1623,6 +1960,53 @@ body {
     height: 46px !important;
     font-size: 16px !important;
     border-radius: 8px !important;
+  }
+
+  /* 官方机考系数表移动端 Bottom Sheet 模式 */
+  .coeff-window {
+    position: fixed !important;
+    left: 0 !important;
+    right: 0 !important;
+    top: auto !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    border-radius: 20px 20px 0 0 !important;
+    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.45) !important;
+    z-index: 1006 !important;
+    transform: translateY(100%);
+    transition: transform 0.32s cubic-bezier(0.2, 0.9, 0.3, 1);
+    max-height: 85vh;
+    height: 80vh !important;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .coeff-window.active {
+    transform: translateY(0);
+  }
+
+  .coeff-header {
+    border-radius: 20px 20px 0 0;
+    cursor: default !important;
+    padding: 12px 16px;
+  }
+
+  .coeff-quick-bar {
+    padding: 8px 10px;
+  }
+
+  .coeff-tabs {
+    padding: 4px 6px;
+  }
+
+  .coeff-tab-btn {
+    padding: 6px 10px;
+    font-size: 11px;
+  }
+
+  .coeff-rules-grid {
+    grid-template-columns: 1fr;
   }
 
   /* 模态弹窗移动端流式适配 (准考证/导入/成绩单) */

@@ -80,6 +80,10 @@
         <span>🧮</span> <span class="desktop-only">考试计算器</span>
       </button>
 
+      <button class="header-action-btn" id="btnOpenCoeff" title="考试专用系数表 (Alt + T)">
+        <span>📊</span> <span>系数表</span>
+      </button>
+
       <button class="header-action-btn mobile-drawer-btn" id="btnToggleDrawer" title="查看题号方阵">
         <span>📋</span> <span>题号</span>
       </button>
@@ -156,7 +160,12 @@
             <span class="reformed-tag" id="reformedBadge" style="display: none;">🔥 2026新规考点</span>
             <span class="q-number-indicator" id="qNumberIndicator">第 1 题 / 共 18 题</span>
           </div>
-          <div class="q-score-indicator" id="qScoreIndicator">本题分值: 1.0 分</div>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <button class="q-coeff-btn" id="qCoeffBtn" title="查阅官方考试专用系数表 (Alt + T)">
+              <span>📊</span> <span>考试系数表</span>
+            </button>
+            <div class="q-score-indicator" id="qScoreIndicator">本题分值: 1.0 分</div>
+          </div>
         </div>
 
         <!-- 题干 -->
@@ -207,7 +216,7 @@
           <button class="header-action-btn submit-btn mobile-submit-btn" id="footerSubmitBtn" title="交卷并查看考生成绩单">
             <span>📝</span> <span>交卷</span>
           </button>
-          <span class="desktop-only footer-shortcuts" style="font-size: 12px; color: #8c9ba5;">快捷键：[←/→]切题 | [A-E]选答案 | [M]标记 | [Alt+C]计算器</span>
+          <span class="desktop-only footer-shortcuts" style="font-size: 12px; color: #8c9ba5;">快捷键：[←/→]切题 | [A-E]选答案 | [M]标记 | [Alt+C]计算器 | [Alt+T]系数表</span>
           <a href="https://github.com/lyf266/bank-exam-2026-toolkit" target="_blank" rel="noopener noreferrer" class="footer-copyright-tag desktop-only" title="点击访问 GitHub 项目仓库">
             <span>制作: lyf266 | 仅供个人备考，严禁商用 (Apache-2.0) · GitHub ↗</span>
           </a>
@@ -327,6 +336,126 @@
   </div>
 
   <!-- ==========================================================================
+       官方全真机考专用四大系数表 (ATA 浮动窗口 · 支持拖拽与快速检索)
+       ========================================================================== -->
+  <div class="coeff-window" id="coeffWindow">
+    <div class="coeff-header" id="coeffHeader">
+      <div class="coeff-header-title">
+        <span>📊 银行业考试专用系数表</span>
+        <span class="coeff-header-sub desktop-only">(ATA 全真标准版 · 可按住拖拽)</span>
+      </div>
+      <div class="coeff-header-controls">
+        <button class="coeff-ctrl-btn" id="coeffMaxBtn" title="最大化 / 还原窗口">⛶</button>
+        <button class="coeff-ctrl-btn" id="coeffCloseBtn" title="关闭系数表 (Alt + T / Esc)">✕</button>
+      </div>
+    </div>
+
+    <!-- 顶部极速查算与单元格定位条 -->
+    <div class="coeff-quick-bar">
+      <div class="coeff-quick-inputs">
+        <div class="coeff-quick-field">
+          <label for="coeffQuickRate">利率 r (%):</label>
+          <input type="number" id="coeffQuickRate" value="5" step="0.5" min="0.1" max="100">
+        </div>
+        <div class="coeff-quick-field">
+          <label for="coeffQuickPeriod">期数 n (年):</label>
+          <input type="number" id="coeffQuickPeriod" value="5" step="1" min="1" max="100">
+        </div>
+        <div class="coeff-quick-field desktop-only">
+          <label for="coeffQuickAmount">本金/年金 (元):</label>
+          <input type="number" id="coeffQuickAmount" value="10000" step="1000" min="0">
+        </div>
+      </div>
+
+      <div class="coeff-quick-badges" id="coeffQuickBadges">
+        <span class="coeff-badge" title="复利现值系数 (P/F)">P/F: <strong id="coeffBadgePF">0.7835</strong></span>
+        <span class="coeff-badge" title="复利终值系数 (F/P)">F/P: <strong id="coeffBadgeFP">1.2763</strong></span>
+        <span class="coeff-badge" title="普通年金现值系数 (P/A)">P/A: <strong id="coeffBadgePA">4.3295</strong></span>
+        <span class="coeff-badge" title="普通年金终值系数 (F/A)">F/A: <strong id="coeffBadgeFA">5.5256</strong></span>
+      </div>
+    </div>
+
+    <!-- 选项卡切换 -->
+    <div class="coeff-tabs">
+      <button class="coeff-tab-btn active" data-tab="pf">📉 附表一：复利现值 (P/F)</button>
+      <button class="coeff-tab-btn" data-tab="fp">📈 附表二：复利终值 (F/P)</button>
+      <button class="coeff-tab-btn" data-tab="pa">💶 附表三：年金现值 (P/A)</button>
+      <button class="coeff-tab-btn" data-tab="fa">💰 附表四：年金终值 (F/A)</button>
+      <button class="coeff-tab-btn" data-tab="tips">🔑 倒数秘籍与公式</button>
+    </div>
+
+    <!-- 主体表格与内容区 -->
+    <div class="coeff-body">
+      <!-- 附表一：复利现值 (P/F) -->
+      <div class="coeff-tab-pane active" id="pane-pf">
+        <div class="coeff-pane-desc">
+          <strong>复利现值公式</strong>：\(PV = FV \times (1 + r)^{-n} = FV \times (P/F, r, n)\) ｜ <em>已知终值求折现现值</em>
+        </div>
+        <div class="coeff-table-wrap" id="tableWrapPF"></div>
+      </div>
+
+      <!-- 附表二：复利终值 (F/P) -->
+      <div class="coeff-tab-pane" id="pane-fp">
+        <div class="coeff-pane-desc">
+          <strong>复利终值公式</strong>：\(FV = PV \times (1 + r)^n = PV \times (F/P, r, n)\) ｜ <em>已知本金求利滚利未来本利和</em>
+        </div>
+        <div class="coeff-table-wrap" id="tableWrapFP"></div>
+      </div>
+
+      <!-- 附表三：普通年金现值 (P/A) -->
+      <div class="coeff-tab-pane" id="pane-pa">
+        <div class="coeff-pane-desc">
+          <strong>普通年金现值公式</strong>：\(PV = A \times \frac{1 - (1 + r)^{-n}}{r} = A \times (P/A, r, n)\) ｜ <em>已知每期等额收付求总现值</em>
+        </div>
+        <div class="coeff-table-wrap" id="tableWrapPA"></div>
+      </div>
+
+      <!-- 附表四：普通年金终值 (F/A) -->
+      <div class="coeff-tab-pane" id="pane-fa">
+        <div class="coeff-pane-desc">
+          <strong>普通年金终值公式</strong>：\(FV = A \times \frac{(1 + r)^n - 1}{r} = A \times (F/A, r, n)\) ｜ <em>已知每期定投求累计本利和总额</em>
+        </div>
+        <div class="coeff-table-wrap" id="tableWrapFA"></div>
+      </div>
+
+      <!-- 附表五：考点秘籍与倒数关系 -->
+      <div class="coeff-tab-pane" id="pane-tips">
+        <div class="coeff-rules-grid">
+          <div class="coeff-rule-box">
+            <div class="coeff-rule-title">⚖️ 机考常考三大互为倒数关系（客观题必背）</div>
+            <p>• <strong>复利终值系数</strong> 与 <strong>复利现值系数</strong> 互为倒数：\((F/P) \times (P/F) = 1\)</p>
+            <p>• <strong>普通年金终值系数</strong> 与 <strong>偿债基金系数</strong> 互为倒数：\((F/A) \times (A/F) = 1\)</p>
+            <p>• <strong>普通年金现值系数</strong> 与 <strong>投资回收系数</strong> 互为倒数：\((P/A) \times (A/P) = 1\)</p>
+            <div class="coeff-mnemonic">🔑 15字秒杀口诀：终现互倒年金配，偿债配终收配现。</div>
+          </div>
+
+          <div class="coeff-rule-box">
+            <div class="coeff-rule-title">📅 期初年金（先付年金）换算规律</div>
+            <p>先付年金比后付年金每期款项多计息 1 期，因此直接在后付年金基础上乘以 \((1 + r)\)：</p>
+            <p>• <strong>期初终值</strong>：\(FV_{\text{due}} = A \times [(F/A, r, n+1) - 1]\)（期数加 1，系数减 1）</p>
+            <p>• <strong>期初现值</strong>：\(PV_{\text{due}} = A \times [(P/A, r, n-1) + 1]\)（期数减 1，系数加 1）</p>
+            <div class="coeff-mnemonic">🔑 口诀：期初终值加一减一，期初现值减一加一。</div>
+          </div>
+
+          <div class="coeff-rule-box">
+            <div class="coeff-rule-title">♾️ 永续年金现值极速求解</div>
+            <p>• <strong>标准永续年金</strong>：\(PV = \frac{C}{r}\)（如优先股每年恒定派息）</p>
+            <p>• <strong>增长型永续年金</strong>：\(PV = \frac{C_1}{r - g}\)（分母为贴现率减长期增长率）</p>
+            <div class="coeff-mnemonic">🔑 口诀：永续年金求现值，年金除以贴现率。</div>
+          </div>
+
+          <div class="coeff-rule-box">
+            <div class="coeff-rule-title">⚡ 72 法则极速翻倍估算</div>
+            <p>• 资产翻倍年限 \(t \approx 72 / (r \times 100)\)</p>
+            <p>• 例：年化收益率 6% 翻倍约需 \(72 / 6 = 12\) 年；8% 翻倍约需 \(72 / 8 = 9\) 年。</p>
+            <div class="coeff-mnemonic">🔑 口诀：投资翻倍用七二，七十二除以收益率。</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
        考前准考证核对模态框 (ATA 考前必备阶段)
        ========================================================================== -->
   <div class="modal-overlay" id="ticketModal">
@@ -372,7 +501,7 @@
           <strong>⚠️ 考场特别提示与纪律须知：</strong>
           <ol>
             <li>本考试实行闭卷计算机考试，严禁携带实体草稿纸、实体计算器、手机等电子设备。</li>
-            <li>系统内置【标准科学计算器】与【理财专向 TVM 计算器】，可通过屏幕上方按钮随时调用。</li>
+            <li>系统内置【标准科学计算器】、【理财专向 TVM 计算器】与【官方考试专用系数表】（支持 Alt+T 随时呼出查阅四大系数），可通过屏幕上方或题干右上角按钮随时调用。</li>
             <li>试卷包含单选题、多选题和判断题。多选题多选、少选、错选均不得分。</li>
             <li>按 F11 可进入全屏真实考场环境；答题过程中可通过左侧方阵自由切换题号或标记重点。</li>
             <li><strong>左下角进入项目仓库可免费获取710题Anki科学卡包。</strong></li>
@@ -514,6 +643,7 @@ D. 8%
   <script src="js/presets.js"></script>
   <script src="js/past_papers.js"></script>
   <script src="js/calculator.js"></script>
+  <script src="js/coefficient_table.js"></script>
   <script src="js/importer.js"></script>
   <script src="js/exam_core.js"></script>
 
@@ -528,6 +658,21 @@ D. 8%
       document.getElementById("calcCloseBtn").addEventListener("click", () => {
         window.examCalc.hide();
       });
+
+      // 1.5 初始化考试专用系数表
+      window.examCoeff = new ExamCoefficientTable();
+      const btnOpenCoeff = document.getElementById("btnOpenCoeff");
+      if (btnOpenCoeff) {
+        btnOpenCoeff.addEventListener("click", () => {
+          window.examCoeff.toggle();
+        });
+      }
+      const qCoeffBtn = document.getElementById("qCoeffBtn");
+      if (qCoeffBtn) {
+        qCoeffBtn.addEventListener("click", () => {
+          window.examCoeff.toggle();
+        });
+      }
 
       // 2. 初始化导入器
       window.examImporter = new QuestionImporter();

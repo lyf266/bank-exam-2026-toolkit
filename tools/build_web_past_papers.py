@@ -14,6 +14,9 @@ DATA_DIR = os.path.join(PROJECT_DIR, "data", "past_papers")
 OUTPUT_JS = os.path.join(PROJECT_DIR, "js", "past_papers.js")
 
 PAPER_ORDER = [
+    # 2026 年最新网络全真完整套卷 (125题全量机考版)
+    "2026_law_complete_online",
+    "2026_finance_complete_online",
     # 2025 年 10 月最新机考回忆卷
     "2025_10_law",
     "2025_10_finance",
