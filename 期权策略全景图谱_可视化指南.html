@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>金融期权策略全景图谱与决策可视化指南</title>
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --card-border: #e2e8f0;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --accent: #bf4520;
+      --accent-tint: rgba(191, 69, 32, 0.08);
+      --profit: #10b981;
+      --profit-fill: rgba(16, 185, 129, 0.12);
+      --loss: #ef4444;
+      --loss-fill: rgba(239, 68, 68, 0.12);
+      --curve: #2563eb;
+      --font-family: "Source Han Sans SC", "Noto Sans CJK SC", "Noto Sans SC", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--font-family);
+      background-color: var(--bg);
+      color: var(--text-main);
+      line-height: 1.6;
+      padding: 32px 24px;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    header {
+      margin-bottom: 32px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--card-border);
+    }
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      font-size: 12px;
+      font-weight: 600;
+      background: var(--accent-tint);
+      color: var(--accent);
+      border-radius: 4px;
+      margin-bottom: 8px;
+    }
+    h1 { font-size: 28px; font-weight: 700; color: var(--text-main); margin-bottom: 8px; }
+    .subtitle { color: var(--text-muted); font-size: 15px; }
+
+    /* Section Styling */
+    section {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 28px;
+      margin-bottom: 32px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+    .section-title {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-desc {
+      color: var(--text-muted);
+      font-size: 14px;
+      margin-bottom: 24px;
+    }
+
+    /* Grid Layouts */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(480px, 1fr));
+      gap: 24px;
+    }
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+    }
+
+    /* Strategy Card */
+    .strategy-card {
+      background: #ffffff;
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+    }
+    .strategy-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 12px;
+    }
+    .strategy-name { font-size: 16px; font-weight: 700; }
+    .strategy-tag {
+      font-size: 12px;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: 500;
+    }
+    .tag-bull { background: #ecfdf5; color: #047857; }
+    .tag-bear { background: #fef2f2; color: #b91c1c; }
+    .tag-neutral { background: #eff6ff; color: #1d4ed8; }
+    .tag-vol { background: #fdf4ff; color: #86198f; }
+
+    /* Chart Container */
+    .chart-box {
+      width: 100%;
+      height: 220px;
+      margin: 12px 0;
+      background: #fafafa;
+      border-radius: 6px;
+      border: 1px solid #f1f5f9;
+      position: relative;
+    }
+    svg.payoff-svg {
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+
+    .metrics-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      font-size: 12px;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px dashed var(--card-border);
+    }
+    .metric-item span:first-child { color: var(--text-muted); }
+    .metric-item span:last-child { font-weight: 600; float: right; }
+
+    /* Interactive Decision Tree / Flowchart */
+    .flow-step {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 12px 16px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      margin-bottom: 12px;
+    }
+    .flow-condition {
+      font-weight: 700;
+      color: var(--text-main);
+      width: 160px;
+      flex-shrink: 0;
+    }
+    .flow-arrow { color: var(--accent); font-weight: 900; }
+    .flow-strategy {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-grow: 1;
+    }
+    .flow-desc { font-size: 13px; color: var(--text-muted); }
+
+    /* Quadrant Map SVG */
+    .quadrant-box {
+      width: 100%;
+      height: 440px;
+      background: #ffffff;
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+    }
+
+    /* Comparison Table */
+    table.data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    table.data-table th, table.data-table td {
+      padding: 12px 14px;
+      text-align: left;
+      border-bottom: 1px solid var(--card-border);
+    }
+    table.data-table th {
+      background: #f8fafc;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+    table.data-table tr:hover { background: #fdfdfe; }
+
+    .callout {
+      padding: 16px;
+      border-left: 4px solid var(--accent);
+      background: var(--accent-tint);
+      border-radius: 0 8px 8px 0;
+      margin-top: 20px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- Header -->
+  <header>
+    <div class="badge">银行从业 · 投资学衍生品核心专攻</div>
+    <h1>金融期权策略全景图谱与决策可视化指南</h1>
+    <p class="subtitle">采用 Diagram Design 架构标准设计 · 涵盖损益曲线(Payoff)、决策流(Decision Tree)、四象限空间与对冲矩阵</p>
+  </header>
+
+  <!-- Section 1: 策略选择决策树 -->
+  <section>
+    <div class="section-title">
+      <span>🌲</span> 模块一：期权交易策略智能决策流 (Decision Flowchart)
+    </div>
+    <p class="section-desc">根据对标的资产未来「方向（涨/跌/盘）」与「波动率（大/小）」的二元预期，快速锁定最佳衍生品策略：</p>
+
+    <div class="flow-step">
+      <div class="flow-condition">🚀 强烈看涨 (大涨)</div>
+      <div class="flow-arrow">➔</div>
+      <div class="flow-strategy">
+        <strong>买入看涨期权 (Long Call)</strong>
+        <span class="flow-desc">杠杆极高、损失锁定为权利金，向上享受无限涨幅收益</span>
+      </div>
+    </div>
+
+    <div class="flow-step">
+      <div class="flow-condition">📈 温和看涨 (防踏空)</div>
+      <div class="flow-arrow">➔</div>
+      <div class="flow-strategy">
+        <strong>牛市看涨价差 (Bull Call Spread)</strong>
+        <span class="flow-desc">买低行权价Call + 卖高行权价Call，降低权利金成本，锁定适度收益</span>
+      </div>
+    </div>
+
+    <div class="flow-step">
+      <div class="flow-condition">🛡️ 持股避险 (防崩盘)</div>
+      <div class="flow-arrow">➔</div>
+      <div class="flow-strategy">
+        <strong style="color:var(--accent);">保护性看跌期权 (Protective Put)</strong>
+        <span class="flow-desc"><strong>【真题正解】</strong>持有股票现货 + 买入Put，给股票买保险，彻底封死下行深渊！</span>
+      </div>
+    </div>
+
+    <div class="flow-step">
+      <div class="flow-condition">🌾 震荡微涨 (赚利息)</div>
+      <div class="flow-arrow">➔</div>
+      <div class="flow-strategy">
+        <strong style="color:#b45309;">备兑看涨期权 (Covered Call)</strong>
+        <span class="flow-desc"><strong>【真题易错项】</strong>持有股票 + 卖出Call，赚取微薄权利金。<strong>无法防范股价崩盘！</strong></span>
+      </div>
+    </div>
+
+    <div class="flow-step">
+      <div class="flow-condition">📉 强烈看跌 (大跌)</div>
+      <div class="flow-arrow">➔</div>
+      <div class="flow-strategy">
+        <strong>买入看跌期权 (Long Put)</strong>
+        <span class="flow-desc">做空利器、杠杆收益，最大亏损仅为权利金</span>
+      </div>
+    </div>
+
+    <div class="flow-step">
+      <div class="flow-condition">⚡ 预期巨震 (方向未明)</div>
+      <div class="flow-arrow">➔</div>
+      <div class="flow-strategy">
+        <strong>买入跨式期权 (Long Straddle)</strong>
+        <span class="flow-desc">同时买入同到期、同行权价的 Call 和 Put，赌大事件破局或暴涨暴跌</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 2: 四象限策略矩阵 -->
+  <section>
+    <div class="section-title">
+      <span>🧭</span> 模块二：市场研判四象限定位图 (Quadrant Map)
+    </div>
+    <p class="section-desc">将期权策略在「市场方向（横轴）」与「隐含波动率（纵轴）」二维坐标系中精准定位：</p>
+    
+    <div class="quadrant-box">
+      <svg viewBox="0 0 800 400" style="width:100%; height:100%; font-family:var(--font-family);">
+        <!-- Background fills -->
+        <rect x="0" y="0" width="400" height="200" fill="#fdf4ff" opacity="0.4"/>
+        <rect x="400" y="0" width="400" height="200" fill="#ecfdf5" opacity="0.4"/>
+        <rect x="0" y="200" width="400" height="200" fill="#fef2f2" opacity="0.4"/>
+        <rect x="400" y="200" width="400" height="200" fill="#eff6ff" opacity="0.4"/>
+
+        <!-- Axes -->
+        <line x1="400" y1="20" x2="400" y2="380" stroke="#94a3b8" stroke-width="2" stroke-dasharray="4 4"/>
+        <line x1="20" y1="200" x2="780" y2="200" stroke="#94a3b8" stroke-width="2" stroke-dasharray="4 4"/>
+
+        <!-- Axis Labels -->
+        <text x="760" y="190" font-size="13" font-weight="700" fill="#0f172a" text-anchor="end">极度看涨 (Bullish) ➔</text>
+        <text x="40" y="190" font-size="13" font-weight="700" fill="#0f172a" text-anchor="start">⬅ 极度看跌 (Bearish)</text>
+        <text x="410" y="40" font-size="13" font-weight="700" fill="#0f172a">⬆ 高波动率 (做多波动率 Long Vega)</text>
+        <text x="410" y="375" font-size="13" font-weight="700" fill="#0f172a">⬇ 低波动率 / 横盘 (做空波动率 Short Vega)</text>
+
+        <!-- Quadrant 1 (Top-Right): Bullish + High Vol -->
+        <g transform="translate(480, 70)">
+          <rect width="240" height="70" rx="6" fill="#ffffff" stroke="#10b981" stroke-width="1.5"/>
+          <text x="12" y="26" font-size="14" font-weight="700" fill="#047857">买入看涨 (Long Call)</text>
+          <text x="12" y="48" font-size="12" fill="#64748b">大涨赚大钱 · 锁定最大损失</text>
+        </g>
+
+        <!-- Quadrant 2 (Top-Left): Bearish + High Vol -->
+        <g transform="translate(80, 70)">
+          <rect width="240" height="70" rx="6" fill="#ffffff" stroke="#ef4444" stroke-width="1.5"/>
+          <text x="12" y="26" font-size="14" font-weight="700" fill="#b91c1c">买入看跌 / 买入跨式</text>
+          <text x="12" y="48" font-size="12" fill="#64748b">Long Put / Straddle 避险或巨震</text>
+        </g>
+
+        <!-- Quadrant 3 (Bottom-Left): Bearish + Low Vol -->
+        <g transform="translate(80, 240)">
+          <rect width="240" height="70" rx="6" fill="#ffffff" stroke="#f59e0b" stroke-width="1.5"/>
+          <text x="12" y="26" font-size="14" font-weight="700" fill="#b45309">熊市价差 / 卖出看涨</text>
+          <text x="12" y="48" font-size="12" fill="#64748b">Bear Put Spread / Short Call</text>
+        </g>
+
+        <!-- Quadrant 4 (Bottom-Right): Bullish + Low Vol -->
+        <g transform="translate(480, 240)">
+          <rect width="240" height="70" rx="6" fill="#ffffff" stroke="#3b82f6" stroke-width="1.5"/>
+          <text x="12" y="26" font-size="14" font-weight="700" fill="#1d4ed8">备兑看涨 (Covered Call)</text>
+          <text x="12" y="48" font-size="12" fill="#64748b">持有正股卖Call · 增厚收益</text>
+        </g>
+      </svg>
+    </div>
+  </section>
+
+  <!-- Section 3: 四大基础单腿期权损益图 -->
+  <section>
+    <div class="section-title">
+      <span>📐</span> 模块三：四大单腿基础期权损益图 (Base Payoff Curves)
+    </div>
+    <p class="section-desc">所有复杂期权组合的乐高积木，横轴为到期标的物价格 S，纵轴为损益 P&L：</p>
+
+    <div class="grid-4">
+      <!-- 1. Long Call -->
+      <div class="strategy-card">
+        <div class="strategy-header">
+          <div class="strategy-name">1. 买入看涨 (Long Call)</div>
+          <span class="strategy-tag tag-bull">大涨大赢</span>
+        </div>
+        <div class="chart-box">
+          <svg class="payoff-svg" viewBox="0 0 240 160">
+            <!-- Axes -->
+            <line x1="20" y1="100" x2="220" y2="100" stroke="#cbd5e1" stroke-width="1.5" stroke-dasharray="3 3"/>
+            <line x1="40" y1="15" x2="40" y2="145" stroke="#cbd5e1" stroke-width="1.5"/>
+            <!-- K marker -->
+            <line x1="110" y1="95" x2="110" y2="105" stroke="#94a3b8" stroke-width="2"/>
+            <text x="110" y="118" font-size="11" fill="#64748b" text-anchor="middle">K</text>
+            <text x="145" y="118" font-size="11" fill="#2563eb" text-anchor="middle">损益平衡</text>
+            <!-- Curve -->
+            <polyline points="20,130 110,130 210,30" fill="none" stroke="#2563eb" stroke-width="3"/>
+            <!-- Shaded profit/loss -->
+            <polygon points="110,100 110,130 145,100" fill="rgba(239, 68, 68, 0.2)"/>
+            <polygon points="145,100 210,30 210,100" fill="rgba(16, 185, 129, 0.2)"/>
+          </svg>
+        </div>
+        <div class="metrics-row">
+          <div class="metric-item"><span>最大亏损：</span><span>权利金 (有限)</span></div>
+          <div class="metric-item"><span>最大收益：</span><span>无限大 🚀</span></div>
+          <div class="metric-item"><span>盈亏平衡点：</span><span>行权价 K + 权利金</span></div>
+          <div class="metric-item"><span>时间价值：</span><span style="color:#ef4444;">逐日衰减 ⌛</span></div>
+        </div>
+      </div>
+
+      <!-- 2. Short Call -->
+      <div class="strategy-card">
+        <div class="strategy-header">
+          <div class="strategy-name">2. 卖出看涨 (Short Call)</div>
+          <span class="strategy-tag tag-bear">微利巨险</span>
+        </div>
+        <div class="chart-box">
+          <svg class="payoff-svg" viewBox="0 0 240 160">
+            <line x1="20" y1="60" x2="220" y2="60" stroke="#cbd5e1" stroke-width="1.5" stroke-dasharray="3 3"/>
+            <line x1="40" y1="15" x2="40" y2="145" stroke="#cbd5e1" stroke-width="1.5"/>
+            <line x1="110" y1="55" x2="110" y2="65" stroke="#94a3b8" stroke-width="2"/>
+            <text x="110" y="80" font-size="11" fill="#64748b" text-anchor="middle">K</text>
+            <!-- Curve -->
+            <polyline points="20,30 110,30 210,130" fill="none" stroke="#ea580c" stroke-width="3"/>
+            <polygon points="20,30 110,30 145,60 20,60" fill="rgba(16, 185, 129, 0.2)"/>
+            <polygon points="145,60 210,130 210,60" fill="rgba(239, 68, 68, 0.2)"/>
+          </svg>
+        </div>
+        <div class="metrics-row">
+          <div class="metric-item"><span>最大收益：</span><span>权利金 (有限)</span></div>
+          <div class="metric-item"><span>最大亏损：</span><span style="color:#ef4444;">无限大 💥</span></div>
+          <div class="metric-item"><span>盈亏平衡点：</span><span>行权价 K + 权利金</span></div>
+          <div class="metric-item"><span>时间价值：</span><span style="color:#10b981;">有利赚取 💰</span></div>
+        </div>
+      </div>
+
+      <!-- 3. Long Put -->
+      <div class="strategy-card">
+        <div class="strategy-header">
+          <div class="strategy-name">3. 买入看跌 (Long Put)</div>
+          <span class="strategy-tag tag-bear">做空神器</span>
+        </div>
+        <div class="chart-box">
+          <svg class="payoff-svg" viewBox="0 0 240 160">
+            <line x1="20" y1="100" x2="220" y2="100" stroke="#cbd5e1" stroke-width="1.5" stroke-dasharray="3 3"/>
+            <line x1="40" y1="15" x2="40" y2="145" stroke="#cbd5e1" stroke-width="1.5"/>
+            <line x1="130" y1="95" x2="130" y2="105" stroke="#94a3b8" stroke-width="2"/>
+            <text x="130" y="118" font-size="11" fill="#64748b" text-anchor="middle">K</text>
+            <!-- Curve -->
+            <polyline points="30,30 130,130 220,130" fill="none" stroke="#2563eb" stroke-width="3"/>
+            <polygon points="30,30 95,100 30,100" fill="rgba(16, 185, 129, 0.2)"/>
+            <polygon points="95,100 130,130 220,130 220,100" fill="rgba(239, 68, 68, 0.2)"/>
+          </svg>
+        </div>
+        <div class="metrics-row">
+          <div class="metric-item"><span>最大亏损：</span><span>权利金 (有限)</span></div>
+          <div class="metric-item"><span>最大收益：</span><span>K - 权利金 (巨大)</span></div>
+          <div class="metric-item"><span>盈亏平衡点：</span><span>行权价 K - 权利金</span></div>
+          <div class="metric-item"><span>核心用途：</span><span style="color:#2563eb;">下行做空/套保</span></div>
+        </div>
+      </div>
+
+      <!-- 4. Short Put -->
+      <div class="strategy-card">
+        <div class="strategy-header">
+          <div class="strategy-name">4. 卖出看跌 (Short Put)</div>
+          <span class="strategy-tag tag-bull">抄底赚金</span>
+        </div>
+        <div class="chart-box">
+          <svg class="payoff-svg" viewBox="0 0 240 160">
+            <line x1="20" y1="60" x2="220" y2="60" stroke="#cbd5e1" stroke-width="1.5" stroke-dasharray="3 3"/>
+            <line x1="40" y1="15" x2="40" y2="145" stroke="#cbd5e1" stroke-width="1.5"/>
+            <line x1="130" y1="55" x2="130" y2="65" stroke="#94a3b8" stroke-width="2"/>
+            <text x="130" y="80" font-size="11" fill="#64748b" text-anchor="middle">K</text>
+            <!-- Curve -->
+            <polyline points="30,130 130,30 220,30" fill="none" stroke="#ea580c" stroke-width="3"/>
+            <polygon points="30,130 95,60 30,60" fill="rgba(239, 68, 68, 0.2)"/>
+            <polygon points="95,60 130,30 220,30 220,60" fill="rgba(16, 185, 129, 0.2)"/>
+          </svg>
+        </div>
+        <div class="metrics-row">
+          <div class="metric-item"><span>最大收益：</span><span>权利金 (有限)</span></div>
+          <div class="metric-item"><span>最大亏损：</span><span style="color:#ef4444;">K - 权利金 (巨大)</span></div>
+          <div class="metric-item"><span>盈亏平衡点：</span><span>行权价 K - 权利金</span></div>
+          <div class="metric-item"><span>核心用途：</span><span>震荡看涨/折价买股</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 4: 现货+期权核心组合对比（解密本题争议点） -->
+  <section>
+    <div class="section-title">
+      <span>⚔️</span> 模块四：现货+期权套保组合对比（保护性看跌 vs 备兑看涨）
+    </div>
+    <p class="section-desc">直击机考第 79 题核心交锋点：为什么防范暴跌必须选「保护性看跌」，而「备兑卖涨」绝对不能选？</p>
+
+    <div class="grid-2">
+      <!-- Protective Put -->
+      <div class="strategy-card" style="border: 2px solid #10b981;">
+        <div class="strategy-header">
+          <div>
+            <div class="strategy-name" style="color:#047857; font-size:18px;">✅ 保护性看跌期权 (Protective Put)</div>
+            <div style="font-size:13px; color:#64748b; margin-top:4px;">组合构成：买入标的现货股票 + 买入看跌期权 (Long Stock + Long Put)</div>
+          </div>
+          <span class="strategy-tag tag-bull">完美避险神器</span>
+        </div>
+        
+        <div class="chart-box" style="height:260px;">
+          <svg class="payoff-svg" viewBox="0 0 500 240">
+            <!-- Grid lines -->
+            <line x1="40" y1="140" x2="460" y2="140" stroke="#cbd5e1" stroke-width="1.5" stroke-dasharray="4 4"/>
+            <line x1="60" y1="20" x2="60" y2="220" stroke="#cbd5e1" stroke-width="1.5"/>
+            <!-- K marker -->
+            <line x1="220" y1="130" x2="220" y2="150" stroke="#94a3b8" stroke-width="2"/>
+            <text x="220" y="165" font-size="12" fill="#64748b" text-anchor="middle">行权价 K</text>
+            <text x="320" y="165" font-size="12" fill="#2563eb" text-anchor="middle">保本点 (S0+P)</text>
+
+            <!-- Components dashed -->
+            <line x1="60" y1="220" x2="420" y2="20" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="3 3"/>
+            <text x="380" y="45" font-size="11" fill="#94a3b8">单纯股票现货 (斜率+1)</text>
+
+            <!-- Payoff Curve -->
+            <polyline points="60,170 220,170 420,30" fill="none" stroke="#10b981" stroke-width="4"/>
+            <!-- Floor protection annotation -->
+            <rect x="60" y="170" width="160" height="40" fill="rgba(16, 185, 129, 0.15)"/>
+            <text x="140" y="195" font-size="13" font-weight="700" fill="#047857" text-anchor="middle">🛡️ 下方跌幅被刚性封死！</text>
+          </svg>
+        </div>
+
+        <ul style="font-size:13px; line-height:1.8; color:#334155; padding-left:20px;">
+          <li><strong>防跌机制</strong>：当股价暴跌到 0 元，看跌期权以行权价 K 强行托底，<strong>最大亏损锁定为：初始股价 - 行权价 + 权利金</strong>。</li>
+          <li><strong>上涨收益</strong>：股价大涨时，期权放弃行权，股票多头享受无限收益！</li>
+          <li><strong>结论</strong>：<strong>下有刚性托底，上不封顶！是真正的股票下跌避险策略！</strong></li>
+        </ul>
+      </div>
+
+      <!-- Covered Call -->
+      <div class="strategy-card" style="border: 2px solid #ef4444;">
+        <div class="strategy-header">
+          <div>
+            <div class="strategy-name" style="color:#b91c1c; font-size:18px;">❌ 备兑看涨期权 (Covered Call)</div>
+            <div style="font-size:13px; color:#64748b; margin-top:4px;">组合构成：买入标的现货股票 + 卖出看涨期权 (Long Stock + Short Call)</div>
+          </div>
+          <span class="strategy-tag tag-bear">收益增厚(非避险)</span>
+        </div>
+
+        <div class="chart-box" style="height:260px;">
+          <svg class="payoff-svg" viewBox="0 0 500 240">
+            <!-- Grid lines -->
+            <line x1="40" y1="120" x2="460" y2="120" stroke="#cbd5e1" stroke-width="1.5" stroke-dasharray="4 4"/>
+            <line x1="60" y1="20" x2="60" y2="220" stroke="#cbd5e1" stroke-width="1.5"/>
+            <!-- K marker -->
+            <line x1="280" y1="110" x2="280" y2="130" stroke="#94a3b8" stroke-width="2"/>
+            <text x="280" y="145" font-size="12" fill="#64748b" text-anchor="middle">行权价 K</text>
+
+            <!-- Payoff Curve -->
+            <polyline points="60,220 280,60 440,60" fill="none" stroke="#ef4444" stroke-width="4"/>
+            <!-- Downside danger zone -->
+            <polygon points="60,120 60,220 200,120" fill="rgba(239, 68, 68, 0.2)"/>
+            <text x="110" y="175" font-size="13" font-weight="700" fill="#b91c1c" text-anchor="middle">🚨 暴跌下行风险完全敞口！</text>
+          </svg>
+        </div>
+
+        <ul style="font-size:13px; line-height:1.8; color:#334155; padding-left:20px;">
+          <li><strong>防跌机制</strong>：仅收到区区 2~3 元的微薄权利金。当股价从 100 元跌到 50 元时，每股净亏损高达 47 元！</li>
+          <li><strong>上涨收益</strong>：股价涨破行权价 K 后，股票必须被买方按低价买走，<strong>上涨利润被彻底封死</strong>！</li>
+          <li><strong>结论</strong>：<strong>权利金杯水车薪，无法防御暴跌，根本不属于规避下跌策略！</strong></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 5: 进阶价差与波动率策略 -->
+  <section>
+    <div class="section-title">
+      <span>📊</span> 模块五：进阶组合策略（牛熊价差 & 双向突破）
+    </div>
+    <p class="section-desc">专业投资者在控制风险成本时最常调用的组合形态：</p>
+
+    <div class="grid-2">
+      <!-- Bull Call Spread -->
+      <div class="strategy-card">
+        <div class="strategy-header">
+          <div class="strategy-name">牛市看涨价差 (Bull Call Spread)</div>
+          <span class="strategy-tag tag-bull">低成本温和看涨</span>
+        </div>
+        <div class="chart-box">
+          <svg class="payoff-svg" viewBox="0 0 400 180">
+            <line x1="20" y1="100" x2="380" y2="100" stroke="#cbd5e1" stroke-width="1.5" stroke-dasharray="3 3"/>
+            <text x="130" y="118" font-size="11" fill="#64748b" text-anchor="middle">买入K1(低)</text>
+            <text x="270" y="118" font-size="11" fill="#64748b" text-anchor="middle">卖出K2(高)</text>
+            <!-- S-curve -->
+            <polyline points="30,140 130,140 270,50 370,50" fill="none" stroke="#2563eb" stroke-width="3.5"/>
+            <polygon points="130,100 130,140 190,100" fill="rgba(239, 68, 68, 0.2)"/>
+            <polygon points="190,100 270,50 370,50 370,100" fill="rgba(16, 185, 129, 0.2)"/>
+          </svg>
+        </div>
+        <div class="metrics-row">
+          <div class="metric-item"><span>构成：</span><span>买低行权Call + 卖高行权Call</span></div>
+          <div class="metric-item"><span>特征：</span><span>锁定最大收益与最大亏损</span></div>
+        </div>
+      </div>
+
+      <!-- Long Straddle -->
+      <div class="strategy-card">
+        <div class="strategy-header">
+          <div class="strategy-name">买入跨式期权 (Long Straddle)</div>
+          <span class="strategy-tag tag-vol">赌大幅暴涨/暴跌</span>
+        </div>
+        <div class="chart-box">
+          <svg class="payoff-svg" viewBox="0 0 400 180">
+            <line x1="20" y1="80" x2="380" y2="80" stroke="#cbd5e1" stroke-width="1.5" stroke-dasharray="3 3"/>
+            <text x="200" y="150" font-size="11" fill="#64748b" text-anchor="middle">相同行权价 K</text>
+            <!-- V-curve -->
+            <polyline points="40,30 200,130 360,30" fill="none" stroke="#8b5cf6" stroke-width="3.5"/>
+            <polygon points="110,80 200,130 290,80" fill="rgba(239, 68, 68, 0.2)"/>
+            <polygon points="40,30 110,80 40,80" fill="rgba(16, 185, 129, 0.2)"/>
+            <polygon points="290,80 360,30 360,80" fill="rgba(16, 185, 129, 0.2)"/>
+          </svg>
+        </div>
+        <div class="metrics-row">
+          <div class="metric-item"><span>构成：</span><span>同时买入同K的Call和Put</span></div>
+          <div class="metric-item"><span>特征：</span><span>大涨或大跌都赚，横盘亏双份权利金</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 6: 全策略核心参数横向对比总表 -->
+  <section>
+    <div class="section-title">
+      <span>📋</span> 模块六：期权常用策略综合要素速查矩阵 (Master Strategy Matrix)
+    </div>
+    
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>策略名称</th>
+          <th>组合头寸构建</th>
+          <th>市场观点与适用场景</th>
+          <th>最大收益</th>
+          <th>最大风险</th>
+          <th>盈亏平衡点 (Break-even)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>买入看涨 (Long Call)</strong></td>
+          <td>买入看涨期权</td>
+          <td>强烈看涨，预期暴涨</td>
+          <td>无限大</td>
+          <td>全部权利金 (有限)</td>
+          <td>行权价 K + 权利金</td>
+        </tr>
+        <tr>
+          <td><strong>卖出看涨 (Short Call)</strong></td>
+          <td>卖出看涨期权</td>
+          <td>看平或温和看跌</td>
+          <td>全部权利金 (有限)</td>
+          <td>无限大</td>
+          <td>行权价 K + 权利金</td>
+        </tr>
+        <tr>
+          <td><strong>买入看跌 (Long Put)</strong></td>
+          <td>买入看跌期权</td>
+          <td>强烈看跌，预期暴跌</td>
+          <td>行权价 K - 权利金</td>
+          <td>全部权利金 (有限)</td>
+          <td>行权价 K - 权利金</td>
+        </tr>
+        <tr>
+          <td><strong>卖出看跌 (Short Put)</strong></td>
+          <td>卖出看跌期权</td>
+          <td>看平或温和看涨</td>
+          <td>全部权利金 (有限)</td>
+          <td>行权价 K - 权利金</td>
+          <td>行权价 K - 权利金</td>
+        </tr>
+        <tr style="background:#f0fdf4;">
+          <td><strong style="color:#047857;">保护性看跌 (Protective Put)</strong></td>
+          <td>标的现货多头 + 买入看跌期权</td>
+          <td><strong>长期持股但防范中短期暴跌</strong></td>
+          <td>无限大</td>
+          <td><strong>锁定有限下行最大亏损</strong></td>
+          <td>现货买入价 S0 + 权利金</td>
+        </tr>
+        <tr style="background:#fef2f2;">
+          <td><strong style="color:#b91c1c;">备兑看涨 (Covered Call)</strong></td>
+          <td>标的现货多头 + 卖出看涨期权</td>
+          <td><strong>长期持股，预期震荡横盘赚租金</strong></td>
+          <td>行权价 - 现货成本 + 权利金</td>
+          <td><strong>现货成本 - 权利金 (几乎全额下跌)</strong></td>
+          <td>现货买入价 S0 - 权利金</td>
+        </tr>
+        <tr>
+          <td><strong>牛市看涨价差 (Bull Spread)</strong></td>
+          <td>买入低行权Call + 卖出高行权Call</td>
+          <td>温和看涨，降低成本</td>
+          <td>两行权价之差 - 净权利金</td>
+          <td>净权利金支出 (有限)</td>
+          <td>低行权价 K1 + 净权利金</td>
+        </tr>
+        <tr>
+          <td><strong>买入跨式 (Long Straddle)</strong></td>
+          <td>买入相同K的Call + 买入相同K的Put</td>
+          <td>重大财报/大选出炉，预期剧烈单边爆发</td>
+          <td>无限大</td>
+          <td>全部两份权利金之和</td>
+          <td>上：K + 总权利金；下：K - 总权利金</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout">
+      <strong>💡 银行从业机考终极避坑记忆绝招：</strong><br>
+      ① 凡是问<strong>“规避股票下跌风险”</strong>：必选 <strong>【买入看跌期权（Protective Put）】</strong> 或 <strong>【卖出股指期货】</strong>；<br>
+      ② 凡是看到 <strong>【卖出看涨期权（Covered Call）】</strong>：必须牢记它只能收到几块钱权利金，面对暴跌毫无招架之力，是<strong>“收益增强”</strong>而非<strong>“避险套保”</strong>！
+    </div>
+  </section>
+
+</div>
+
+</body>
+</html>

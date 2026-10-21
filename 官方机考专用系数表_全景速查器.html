@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2026 银行从业初级资格考试 · 官方机考专用系数表与 TVM 全景速查器</title>
+  <style>
+    :root {
+      --primary: #1e40af;
+      --primary-light: #3b82f6;
+      --primary-subtle: #eff6ff;
+      --bg-page: #f8fafc;
+      --bg-card: #ffffff;
+      --text-main: #0f172a;
+      --text-sub: #334155;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --border-focus: #3b82f6;
+      --accent-green: #059669;
+      --accent-amber: #d97706;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+      --font-family: "Source Han Sans SC", "Noto Sans CJK SC", "Noto Sans SC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    }
+
+    [data-theme="dark"] {
+      --bg-page: #0b1120;
+      --bg-card: #1e293b;
+      --text-main: #f8fafc;
+      --text-sub: #cbd5e1;
+      --text-muted: #94a3b8;
+      --border: #334155;
+      --primary-subtle: #1e3a8a33;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-family);
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      line-height: 1.5;
+      padding: 20px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1240px;
+      margin: 0 auto;
+    }
+
+    /* 顶部导航与题头 */
+    .header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--bg-card);
+      padding: 18px 24px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+    }
+
+    .header-title-group h1 {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .header-title-group p {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .btn {
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      color: var(--text-main);
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+
+    .btn:hover {
+      background: var(--primary-subtle);
+      border-color: var(--primary-light);
+      color: var(--primary);
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary);
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-light);
+      color: #ffffff;
+    }
+
+    /* 快速检索与计算条 */
+    .quick-search-box {
+      background: var(--bg-card);
+      padding: 16px 20px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .search-field {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .search-field label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-sub);
+    }
+
+    .search-field input {
+      padding: 7px 12px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 14px;
+      font-family: inherit;
+      width: 110px;
+      background: var(--bg-card);
+      color: var(--text-main);
+    }
+
+    .search-field input:focus {
+      outline: none;
+      border-color: var(--border-focus);
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+    }
+
+    .lookup-results-strip {
+      display: flex;
+      gap: 14px;
+      flex: 1;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+    }
+
+    .result-badge {
+      background: var(--primary-subtle);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+    }
+
+    .result-badge .badge-label {
+      color: var(--text-muted);
+      margin-right: 4px;
+    }
+
+    .result-badge .badge-val {
+      font-weight: 700;
+      color: var(--primary);
+      font-family: "Courier New", Courier, monospace;
+      font-size: 14px;
+    }
+
+    /* 选项卡面板 */
+    .tabs-wrapper {
+      background: var(--bg-card);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .tab-nav {
+      display: flex;
+      border-bottom: 1px solid var(--border);
+      background: rgba(0, 0, 0, 0.02);
+      overflow-x: auto;
+    }
+
+    .tab-btn {
+      padding: 14px 20px;
+      border: none;
+      background: transparent;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+
+    .tab-btn:hover {
+      color: var(--primary);
+    }
+
+    .tab-btn.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+      background: var(--bg-card);
+    }
+
+    .tab-content {
+      display: none;
+      padding: 24px;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .table-info-header {
+      margin-bottom: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .formula-tag {
+      background: var(--primary-subtle);
+      border-left: 4px solid var(--primary);
+      padding: 8px 14px;
+      border-radius: 0 6px 6px 0;
+      font-size: 13px;
+      color: var(--text-sub);
+    }
+
+    .formula-tag strong {
+      color: var(--primary);
+    }
+
+    /* 表格样式 */
+    .table-responsive {
+      max-height: 580px;
+      overflow: auto;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+
+    table.coeff-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      font-size: 13px;
+      text-align: right;
+    }
+
+    table.coeff-table th,
+    table.coeff-table td {
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+      white-space: nowrap;
+    }
+
+    table.coeff-table th {
+      background: var(--primary-subtle);
+      color: var(--primary);
+      font-weight: 700;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    table.coeff-table th.col-period,
+    table.coeff-table td.col-period {
+      position: sticky;
+      left: 0;
+      background: var(--bg-card);
+      z-index: 5;
+      text-align: center;
+      font-weight: 600;
+      width: 80px;
+    }
+
+    table.coeff-table th.col-period {
+      z-index: 15;
+      background: var(--primary-subtle);
+    }
+
+    table.coeff-table tr:hover td {
+      background-color: rgba(59, 130, 246, 0.06);
+    }
+
+    table.coeff-table td.highlight-cell {
+      background-color: rgba(245, 158, 11, 0.25) !important;
+      font-weight: 700;
+      color: var(--accent-amber);
+    }
+
+    /* 核心秘籍卡片 */
+    .rules-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 16px;
+    }
+
+    .rule-card {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+      background: var(--bg-card);
+    }
+
+    .rule-card-title {
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--primary);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .rule-card-body {
+      font-size: 13px;
+      color: var(--text-sub);
+      line-height: 1.6;
+    }
+
+    .mnemonic-quote {
+      margin-top: 8px;
+      padding: 6px 10px;
+      background: rgba(217, 119, 6, 0.1);
+      border-left: 3px solid var(--accent-amber);
+      color: var(--accent-amber);
+      font-weight: 600;
+      border-radius: 0 4px 4px 0;
+    }
+
+    @media print {
+      body {
+        padding: 0;
+        background: #fff;
+      }
+      .header-actions, .quick-search-box, .tab-nav {
+        display: none !important;
+      }
+      .tab-content {
+        display: block !important;
+        page-break-after: always;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- 头部工具栏 -->
+    <header class="header-bar">
+      <div class="header-title-group">
+        <h1>🏛️ 2026 银行业专业人员职业资格考试 · 官方机考专用系数表</h1>
+        <p>依据中国银行业协会与 ATA 官方全真机考模拟系统标准编订 · 四大货币时间价值系数 4 位小数全量核定</p>
+      </div>
+      <div class="header-actions">
+        <button class="btn" onclick="toggleTheme()">🌓 切换暗黑模式</button>
+        <button class="btn btn-primary" onclick="window.print()">🖨️ 打印速查手册</button>
+      </div>
+    </header>
+
+    <!-- 顶部即时查表与 TVM 计算条 -->
+    <section class="quick-search-box">
+      <div class="search-field">
+        <label for="rateInput">折现率/利率 r (%):</label>
+        <input type="number" id="rateInput" value="5" step="0.5" min="0.1" max="100" oninput="updateQuickLookup()">
+      </div>
+      <div class="search-field">
+        <label for="periodInput">计息期数 n (年):</label>
+        <input type="number" id="periodInput" value="5" step="1" min="1" max="100" oninput="updateQuickLookup()">
+      </div>
+      <div class="search-field">
+        <label for="amountInput">基数金额 (元):</label>
+        <input type="number" id="amountInput" value="10000" step="1000" min="0" oninput="updateQuickLookup()">
+      </div>
+
+      <div class="lookup-results-strip" id="lookupResults">
+        <div class="result-badge"><span class="badge-label">复利现值(P/F):</span><span class="badge-val" id="valPF">0.7835</span></div>
+        <div class="result-badge"><span class="badge-label">复利终值(F/P):</span><span class="badge-val" id="valFP">1.2763</span></div>
+        <div class="result-badge"><span class="badge-label">年金现值(P/A):</span><span class="badge-val" id="valPA">4.3295</span></div>
+        <div class="result-badge"><span class="badge-label">年金终值(F/A):</span><span class="badge-val" id="valFA">5.5256</span></div>
+      </div>
+    </section>
+
+    <!-- 选项卡展示区 -->
+    <main class="tabs-wrapper">
+      <nav class="tab-nav">
+        <button class="tab-btn active" onclick="switchTab('pf')">📉 附表一：复利现值系数表 (P/F)</button>
+        <button class="tab-btn" onclick="switchTab('fp')">📈 附表二：复利终值系数表 (F/P)</button>
+        <button class="tab-btn" onclick="switchTab('pa')">💶 附表三：普通年金现值系数表 (P/A)</button>
+        <button class="tab-btn" onclick="switchTab('fa')">💰 附表四：普通年金终值系数表 (F/A)</button>
+        <button class="tab-btn" onclick="switchTab('tips')">🔑 考点倒数秘籍与速算口诀</button>
+      </nav>
+
+      <!-- 附表一：复利现值 -->
+      <section class="tab-content active" id="tab-pf">
+        <div class="table-info-header">
+          <div class="formula-tag">
+            <strong>复利现值公式</strong>：$PV = FV \times (1 + r)^{-n} = FV \times (P/F, r, n)$ ｜ <em>求未来一笔确定资金折算到现在的真实价值</em>
+          </div>
+          <span style="font-size:12px;color:var(--text-muted)">提示：黄色高亮格为当前上方输入的定位点</span>
+        </div>
+        <div class="table-responsive" id="tableContainerPF"></div>
+      </section>
+
+      <!-- 附表二：复利终值 -->
+      <section class="tab-content" id="tab-fp">
+        <div class="table-info-header">
+          <div class="formula-tag">
+            <strong>复利终值公式</strong>：$FV = PV \times (1 + r)^n = PV \times (F/P, r, n)$ ｜ <em>求现在一笔本金若干年后利滚利的本利和总额</em>
+          </div>
+        </div>
+        <div class="table-responsive" id="tableContainerFP"></div>
+      </section>
+
+      <!-- 附表三：普通年金现值 -->
+      <section class="tab-content" id="tab-pa">
+        <div class="table-info-header">
+          <div class="formula-tag">
+            <strong>普通年金现值公式</strong>：$PV = A \times \frac{1 - (1 + r)^{-n}}{r} = A \times (P/A, r, n)$ ｜ <em>求每年等额收付多期款项折算到现在的一次性总价值</em>
+          </div>
+        </div>
+        <div class="table-responsive" id="tableContainerPA"></div>
+      </section>
+
+      <!-- 附表四：普通年金终值 -->
+      <section class="tab-content" id="tab-fa">
+        <div class="table-info-header">
+          <div class="formula-tag">
+            <strong>普通年金终值公式</strong>：$FV = A \times \frac{(1 + r)^n - 1}{r} = A \times (F/A, r, n)$ ｜ <em>求每年年末定期定额投入，n 年后连本带利累积总金额</em>
+          </div>
+        </div>
+        <div class="table-responsive" id="tableContainerFA"></div>
+      </section>
+
+      <!-- 考点秘籍 -->
+      <section class="tab-content" id="tab-tips">
+        <div class="rules-grid">
+          <div class="rule-card">
+            <div class="rule-card-title">⚖️ 互为倒数关系（机考必考）</div>
+            <div class="rule-card-body">
+              • <strong>复利终值系数</strong> 与 <strong>复利现值系数</strong> 互为倒数：$(F/P) \times (P/F) = 1$<br/>
+              • <strong>普通年金终值系数</strong> 与 <strong>偿债基金系数</strong> 互为倒数：$(F/A) \times (A/F) = 1$<br/>
+              • <strong>普通年金现值系数</strong> 与 <strong>投资回收系数</strong> 互为倒数：$(P/A) \times (A/P) = 1$
+              <div class="mnemonic-quote">🔑 15字秒杀口诀：终现互倒年金配，偿债配终收配现。</div>
+            </div>
+          </div>
+
+          <div class="rule-card">
+            <div class="rule-card-title">📅 期初年金（先付年金）转换口诀</div>
+            <div class="rule-card-body">
+              期初每一笔款项比期末多滚存 1 期利息，故直接在期末年金基础上乘以 $(1 + r)$：<br/>
+              • <strong>期初终值</strong>：$FV_{\text{due}} = A \times [(F/A, r, n+1) - 1]$<br/>
+              • <strong>期初现值</strong>：$PV_{\text{due}} = A \times [(P/A, r, n-1) + 1]$
+              <div class="mnemonic-quote">🔑 口诀：期初终值加一减一，期初现值减一加一。</div>
+            </div>
+          </div>
+
+          <div class="rule-card">
+            <div class="rule-card-title">♾️ 永续年金现值直接秒杀</div>
+            <div class="rule-card-body">
+              无限期等额支付的年金（如优先股股息、永久奖学金基金）：<br/>
+              • <strong>标准永续年金</strong>：$PV = C / r$ （直接拿每年分红除以贴现率）<br/>
+              • <strong>增长型永续年金</strong>：$PV = C_1 / (r - g)$ （除以利率与增长率之差）
+              <div class="mnemonic-quote">🔑 口诀：永续年金求现值，年金直接除以收益率。</div>
+            </div>
+          </div>
+
+          <div class="rule-card">
+            <div class="rule-card-title">⚡ 72 法则极速翻倍估算</div>
+            <div class="rule-card-body">
+              利用 72 法则无需查表即可心算资产翻倍所需年限：<br/>
+              • 翻倍年限 $n \approx 72 / (r \times 100)$<br/>
+              • 若年收益率为 8%，本金翻倍所需年限为：$72 / 8 = 9$ 年。<br/>
+              • 验证查表：$(F/P, 8\%, 9) = 1.9990 \approx 2.0000$ 倍！
+              <div class="mnemonic-quote">🔑 口诀：本金翻倍用七二，七十二除以收益率。</div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const RATES = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 15, 16, 18, 20];
+    const PERIODS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 25, 30];
+
+    function calcCoeff(type, r, n) {
+      const dec = r / 100;
+      if (type === "fp") return Math.pow(1 + dec, n);
+      if (type === "pf") return Math.pow(1 + dec, -n);
+      if (type === "fa") return (Math.pow(1 + dec, n) - 1) / dec;
+      if (type === "pa") return (1 - Math.pow(1 + dec, -n)) / dec;
+      return 0;
+    }
+
+    function renderTable(containerId, type) {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+
+      let html = '<table class="coeff-table"><thead><tr><th class="col-period">期数 (n)</th>';
+      for (const r of RATES) {
+        html += `<th>${r}%</th>`;
+      }
+      html += '</tr></thead><tbody>';
+
+      for (const n of PERIODS) {
+        html += `<tr><td class="col-period">n = ${n}</td>`;
+        for (const r of RATES) {
+          const val = calcCoeff(type, r, n).toFixed(4);
+          html += `<td data-rate="${r}" data-period="${n}">${val}</td>`;
+        }
+        html += '</tr>';
+      }
+      html += '</tbody></table>';
+      container.innerHTML = html;
+    }
+
+    function updateQuickLookup() {
+      const r = parseFloat(document.getElementById("rateInput").value) || 0;
+      const n = parseInt(document.getElementById("periodInput").value) || 0;
+      const amt = parseFloat(document.getElementById("amountInput").value) || 0;
+
+      const pf = calcCoeff("pf", r, n);
+      const fp = calcCoeff("fp", r, n);
+      const pa = calcCoeff("pa", r, n);
+      const fa = calcCoeff("fa", r, n);
+
+      document.getElementById("valPF").innerText = pf.toFixed(4) + (amt > 0 ? ` (≈${(amt*pf).toFixed(1)}元)` : "");
+      document.getElementById("valFP").innerText = fp.toFixed(4) + (amt > 0 ? ` (≈${(amt*fp).toFixed(1)}元)` : "");
+      document.getElementById("valPA").innerText = pa.toFixed(4) + (amt > 0 ? ` (≈${(amt*pa).toFixed(1)}元)` : "");
+      document.getElementById("valFA").innerText = fa.toFixed(4) + (amt > 0 ? ` (≈${(amt*fa).toFixed(1)}元)` : "");
+
+      // 高亮匹配表格单元格
+      document.querySelectorAll(".coeff-table td.highlight-cell").forEach(el => el.classList.remove("highlight-cell"));
+      document.querySelectorAll(`.coeff-table td[data-rate="${r}"][data-period="${n}"]`).forEach(el => {
+        el.classList.add("highlight-cell");
+      });
+    }
+
+    function switchTab(tabKey) {
+      document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+      document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
+
+      const activeBtn = Array.from(document.querySelectorAll(".tab-btn")).find(b => b.getAttribute("onclick").includes(tabKey));
+      if (activeBtn) activeBtn.classList.add("active");
+
+      const activeContent = document.getElementById("tab-" + tabKey);
+      if (activeContent) activeContent.classList.add("active");
+    }
+
+    function toggleTheme() {
+      const current = document.documentElement.getAttribute("data-theme");
+      const next = current === "dark" ? "light" : "dark";
+      document.documentElement.setAttribute("data-theme", next);
+    }
+
+    // 初始化渲染四大表格
+    renderTable("tableContainerPF", "pf");
+    renderTable("tableContainerFP", "fp");
+    renderTable("tableContainerPA", "pa");
+    renderTable("tableContainerFA", "fa");
+    updateQuickLookup();
+  </script>
+</body>
+</html>

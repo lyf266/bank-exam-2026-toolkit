@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>全球资产负债表与宏观金融双循环全景可视化指南</title>
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --card-border: #e2e8f0;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --accent: #2563eb;
+      --accent-tint: rgba(37, 99, 235, 0.08);
+      --profit: #10b981;
+      --profit-tint: rgba(16, 185, 129, 0.1);
+      --loss: #ef4444;
+      --loss-tint: rgba(239, 68, 68, 0.1);
+      --warning: #f59e0b;
+      --warning-tint: rgba(245, 158, 11, 0.1);
+      --purple: #8b5cf6;
+      --purple-tint: rgba(139, 92, 246, 0.1);
+      --font-family: "Source Han Sans SC", "Noto Sans CJK SC", "Noto Sans SC", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--font-family);
+      background-color: var(--bg);
+      color: var(--text-main);
+      line-height: 1.6;
+      padding: 32px 20px;
+    }
+
+    .container {
+      max-width: 1240px;
+      margin: 0 auto;
+    }
+
+    header {
+      margin-bottom: 32px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--card-border);
+    }
+    .badge {
+      display: inline-block;
+      padding: 4px 12px;
+      font-size: 13px;
+      font-weight: 600;
+      background: var(--accent-tint);
+      color: var(--accent);
+      border-radius: 6px;
+      margin-bottom: 10px;
+    }
+    h1 { font-size: 28px; font-weight: 700; color: var(--text-main); margin-bottom: 8px; }
+    .subtitle { color: var(--text-muted); font-size: 15px; }
+
+    section {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 28px;
+      margin-bottom: 32px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+    }
+    section h2 {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #1e293b;
+    }
+    .desc {
+      color: var(--text-muted);
+      font-size: 14px;
+      margin-bottom: 24px;
+    }
+
+    /* Grid Layouts */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    @media (max-width: 900px) {
+      .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+    }
+
+    .card-box {
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 20px;
+      background: #fafafa;
+    }
+    .card-box.blue { border-left: 4px solid var(--accent); background: #f0f7ff; }
+    .card-box.green { border-left: 4px solid var(--profit); background: #f0fdf4; }
+    .card-box.red { border-left: 4px solid var(--loss); background: #fef2f2; }
+    .card-box.amber { border-left: 4px solid var(--warning); background: #fffbeb; }
+    .card-box.purple { border-left: 4px solid var(--purple); background: #f5f3ff; }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    /* Interactive Simulator */
+    .controls {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .btn {
+      padding: 10px 20px;
+      border-radius: 8px;
+      border: 1px solid var(--card-border);
+      background: #fff;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+    .btn.active-hike {
+      background: #ef4444;
+      color: #fff;
+      border-color: #ef4444;
+    }
+    .btn.active-cut {
+      background: #10b981;
+      color: #fff;
+      border-color: #10b981;
+    }
+
+    .step-chain {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .step-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      padding: 16px;
+      border-radius: 10px;
+      border: 1px solid var(--card-border);
+      background: #fff;
+      transition: all 0.3s ease;
+    }
+    .step-num {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #e2e8f0;
+      color: #475569;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+
+    /* SVG Canvas */
+    .svg-container {
+      width: 100%;
+      overflow-x: auto;
+      text-align: center;
+      padding: 14px 0;
+      background: #ffffff;
+      border-radius: 10px;
+      border: 1px solid var(--card-border);
+      margin-bottom: 20px;
+    }
+
+    table.data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      margin-top: 14px;
+    }
+    table.data-table th, table.data-table td {
+      border: 1px solid var(--card-border);
+      padding: 12px 14px;
+      text-align: left;
+    }
+    table.data-table th {
+      background: #f1f5f9;
+      font-weight: 600;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .tag-green { background: var(--profit-tint); color: #047857; }
+    .tag-red { background: var(--loss-tint); color: #b91c1c; }
+    .tag-blue { background: var(--accent-tint); color: #1d4ed8; }
+    .tag-purple { background: var(--purple-tint); color: #6d28d9; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <div class="badge">🌐 宏观经济与底层认知看板 · 手稿工程化精修</div>
+    <h1>全球资产负债表与宏观金融双循环全景指南</h1>
+    <div class="subtitle">打通【央行-银行-企业居民内循环】与【国债双轨、外汇进出口、热钱潮汐与周期山峰】</div>
+  </header>
+
+  <!-- Module 0: 手稿架构还原总图 -->
+  <section>
+    <h2>🎨 模块零：思维手稿精修 —— 宏观金融双循环与周期山峰全景图谱</h2>
+    <p class="desc">对标手绘草图深度重构：左侧国内信用内循环，中上国债双轨，中下外汇与进出口天平，右侧外部市场、国际收支与周期大山峰：</p>
+
+    <div class="svg-container">
+      <svg viewBox="0 0 1080 520" style="max-width: 1080px; width: 100%; height: auto;">
+        <defs>
+          <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#475569"/>
+          </marker>
+          <marker id="arrow-blue" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#2563eb"/>
+          </marker>
+          <marker id="arrow-green" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#10b981"/>
+          </marker>
+          <marker id="arrow-red" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#ef4444"/>
+          </marker>
+          <linearGradient id="mountainGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#fee2e2"/>
+            <stop offset="50%" stop-color="#fef3c7"/>
+            <stop offset="100%" stop-color="#dcfce7"/>
+          </linearGradient>
+        </defs>
+
+        <!-- 背景：周期山峰 (Mountain Peak) -->
+        <path d="M 740 450 L 910 130 L 1050 450 Z" fill="url(#mountainGrad)" stroke="#cbd5e1" stroke-width="2"/>
+        <circle cx="910" cy="110" r="16" fill="#f59e0b" opacity="0.8"/>
+        <!-- 太阳光芒 -->
+        <line x1="910" y1="85" x2="910" y2="75" stroke="#f59e0b" stroke-width="2"/>
+        <line x1="935" y1="110" x2="945" y2="110" stroke="#f59e0b" stroke-width="2"/>
+        <line x1="928" y1="92" x2="936" y2="84" stroke="#f59e0b" stroke-width="2"/>
+
+        <text x="825" y="270" font-size="14" font-weight="bold" fill="#b91c1c" transform="rotate(-62 825,270)">加息爬坡 (抗通胀/收紧)</text>
+        <text x="980" y="290" font-size="14" font-weight="bold" fill="#15803d" transform="rotate(64 980,290)">降息下坡 (扩内需/放水)</text>
+        <text x="910" y="160" text-anchor="middle" font-size="12" font-weight="bold" fill="#78350f">利率顶峰</text>
+
+        <!-- 左侧区域：国内信用内循环体系 -->
+        <rect x="30" y="40" width="280" height="440" rx="12" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4,4"/>
+        <text x="170" y="68" text-anchor="middle" font-size="15" font-weight="bold" fill="#334155">【国内金融信用内循环】</text>
+
+        <!-- 央行 / 政府 -->
+        <rect x="60" y="90" width="220" height="60" rx="8" fill="#e0e7ff" stroke="#4f46e5" stroke-width="2"/>
+        <text x="170" y="118" text-anchor="middle" font-size="14" font-weight="bold" fill="#3730a3">央行（货币） & 政府（财政）</text>
+        <text x="170" y="136" text-anchor="middle" font-size="11" fill="#4338ca">发国债 · 降准降息 · 宏观调控</text>
+
+        <!-- 箭头: 央行到商业银行 -->
+        <path d="M 170 150 L 170 190" fill="none" stroke="#4f46e5" stroke-width="2" marker-end="url(#arrow)"/>
+        <text x="178" y="175" font-size="11" fill="#6366f1">基础货币流动性</text>
+
+        <!-- 商业银行 / 金融系统 -->
+        <rect x="60" y="195" width="220" height="70" rx="8" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+        <text x="170" y="225" text-anchor="middle" font-size="14" font-weight="bold" fill="#1e40af">商业银行 / 金融体系</text>
+        <text x="170" y="245" text-anchor="middle" font-size="11" fill="#1d4ed8">吸收存款 · 派生信用 · 结售汇中介</text>
+
+        <!-- 双向箭头: 银行与实体 -->
+        <path d="M 120 265 L 120 310" fill="none" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"/>
+        <path d="M 220 310 L 220 265" fill="none" stroke="#10b981" stroke-width="2" marker-end="url(#arrow)"/>
+        <text x="90" y="292" font-size="11" fill="#1d4ed8">发放信贷</text>
+        <text x="228" y="292" font-size="11" fill="#047857">储蓄沉淀</text>
+
+        <!-- 实体企业 / 居民 -->
+        <rect x="60" y="315" width="220" height="75" rx="8" fill="#f0fdf4" stroke="#10b981" stroke-width="2"/>
+        <text x="170" y="345" text-anchor="middle" font-size="14" font-weight="bold" fill="#065f46">实体企业 & 居民家庭</text>
+        <text x="170" y="365" text-anchor="middle" font-size="11" fill="#047857">扩大再生产 · 消费按揭 · 进出口制造</text>
+
+        <!-- 中上区域：国债双轨机制 (一级 vs 二级) -->
+        <rect x="350" y="40" width="340" height="150" rx="12" fill="#fffbeb" stroke="#f59e0b" stroke-width="1.5"/>
+        <text x="520" y="68" text-anchor="middle" font-size="15" font-weight="bold" fill="#b45309">【国债市场双轨运行机制】</text>
+
+        <rect x="370" y="85" width="140" height="85" rx="6" fill="#fff" stroke="#d97706" stroke-width="1"/>
+        <text x="440" y="108" text-anchor="middle" font-size="12" font-weight="bold" fill="#92400e">一级市场 (新发国债)</text>
+        <text x="440" y="130" text-anchor="middle" font-size="11" fill="#b45309">降息 ➔ 票息收益率 ↓</text>
+        <text x="440" y="150" text-anchor="middle" font-size="11" font-weight="bold" fill="#047857">国家发债成本极低</text>
+
+        <rect x="530" y="85" width="140" height="85" rx="6" fill="#fff" stroke="#d97706" stroke-width="1"/>
+        <text x="600" y="108" text-anchor="middle" font-size="12" font-weight="bold" fill="#92400e">二级市场 (老券交易)</text>
+        <text x="600" y="130" text-anchor="middle" font-size="11" fill="#b45309">基准降 ➔ 交易价格 ↑</text>
+        <text x="600" y="150" text-anchor="middle" font-size="12" font-weight="bold" fill="#dc2626">📈 催生债券大牛市！</text>
+
+        <!-- 连接箭头：政府到国债 -->
+        <path d="M 280 115 L 350 115" fill="none" stroke="#f59e0b" stroke-width="2" marker-end="url(#arrow-amber)"/>
+
+        <!-- 中下区域：外汇与进出口天平 -->
+        <rect x="350" y="210" width="340" height="180" rx="12" fill="#fdf2f8" stroke="#ec4899" stroke-width="1.5"/>
+        <text x="520" y="238" text-anchor="middle" font-size="15" font-weight="bold" fill="#be185d">【汇率天平与进出口传导】</text>
+
+        <!-- 升值支线 -->
+        <rect x="370" y="255" width="300" height="55" rx="6" fill="#fff" stroke="#ec4899" stroke-width="1"/>
+        <text x="380" y="278" font-size="12" font-weight="bold" fill="#b91c1c">加息 ➔ 本币升值：</text>
+        <text x="380" y="298" font-size="12" fill="#334155">出国买买买便宜 (<b>利进口 ↑</b>) ；外国买我国货变贵 (<b>抑出口 ↓</b>)</text>
+
+        <!-- 贬值支线 -->
+        <rect x="370" y="320" width="300" height="55" rx="6" fill="#fff" stroke="#ec4899" stroke-width="1"/>
+        <text x="380" y="343" font-size="12" font-weight="bold" fill="#047857">降息 ➔ 本币贬值：</text>
+        <text x="380" y="363" font-size="12" fill="#334155">老外抢买中国制造 (<b>利出口 ↑</b>) ；进口外国大豆变贵 (<b>抑进口 ↓</b>)</text>
+
+        <!-- 右侧区域：外部市场、国际收支与热钱 -->
+        <rect x="720" y="40" width="330" height="150" rx="12" fill="#f5f3ff" stroke="#8b5cf6" stroke-width="1.5"/>
+        <text x="885" y="68" text-anchor="middle" font-size="15" font-weight="bold" fill="#6d28d9">【外部市场 · 外汇 · 国际收支】</text>
+        
+        <text x="740" y="100" font-size="12" font-weight="bold" fill="#4c1d95">1. 国际收支 (BOP)：</text>
+        <text x="755" y="120" font-size="11" fill="#5b21b6">经常账户 (贸易顺差/进出口) + 资本账户 (热钱/FDI)</text>
+        <text x="740" y="145" font-size="12" font-weight="bold" fill="#4c1d95">2. 国际游资热钱 (Hot Money)：</text>
+        <text x="755" y="165" font-size="11" fill="#5b21b6">逐利利差 ➔ 加息涌入吃息，降息踩踏出逃</text>
+
+        <!-- 连线：中下进出口到外部市场国际收支 -->
+        <path d="M 690 300 L 760 300 L 760 190" fill="none" stroke="#8b5cf6" stroke-width="2" stroke-dasharray="4,4" marker-end="url(#arrow)"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- Module 1: 地球总账本 NIIP -->
+  <section>
+    <h2>🏛️ 模块一：地球总账本 —— 国际投资头寸（NIIP）镜像映射</h2>
+    <p class="desc">在地球这一超级跨国集团里，总债权必然等于总债务。全球经济依此形成两大分工阵营：</p>
+    
+    <div class="grid-2">
+      <div class="card-box green">
+        <div class="card-title">
+          <span>🇨🇳 🇯🇵 🇩🇪 净债权部门（全球打工人）</span>
+          <span class="tag tag-green">储蓄 / 顺差国</span>
+        </div>
+        <p style="font-size: 13px; color: #475569; margin-bottom: 10px;">
+          代表国家：中国、日本、德国、海湾石油富国
+        </p>
+        <ul style="font-size: 13px; color: #334155; padding-left: 18px; line-height: 1.8;">
+          <li><b>核心特征</b>：制造业极强、省吃俭用，常年积累巨额贸易顺差。</li>
+          <li><b>账本资产端</b>：手握数万亿美元外汇储备、巨额美国国债与海外资产。</li>
+          <li><b>困境</b>：赚来的巨额美元不能在境内直接花，必须借回给美国买美债吃低息。</li>
+        </ul>
+      </div>
+
+      <div class="card-box red">
+        <div class="card-title">
+          <span>🇺🇸 🇬🇧 净债务部门（全球老财主）</span>
+          <span class="tag tag-red">消费 / 赤字国</span>
+        </div>
+        <p style="font-size: 13px; color: #475569; margin-bottom: 10px;">
+          代表国家：美国、英国等核心金融消费国
+        </p>
+        <ul style="font-size: 13px; color: #334155; padding-left: 18px; line-height: 1.8;">
+          <li><b>核心特征</b>：不干脏活累活，去工业化，常年保持巨额贸易逆差。</li>
+          <li><b>账本负债端</b>：欠全世界超 20 万亿美元净债务，美债总额超 35 万亿美元。</li>
+          <li><b>过高特权</b>：借的是自产绿纸片（美元），拿全世界的借款反向收购全球核心资产。</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Module 2: 宏观多米诺模拟器 -->
+  <section>
+    <h2>⚡ 模块二：宏观政策多米诺传导器（加息 vs 降息）</h2>
+    <p class="desc">点击下方按钮，切换央行货币政策，查看资本链条的连锁反应：</p>
+
+    <div class="controls">
+      <button class="btn active-hike" id="btnHike" onclick="setMode('hike')">📈 央行加息模式（紧缩 / 爬坡抗通胀）</button>
+      <button class="btn" id="btnCut" onclick="setMode('cut')">📉 央行降息模式（宽松 / 下坡促实体）</button>
+    </div>
+
+    <div class="step-chain" id="chainContainer">
+      <!-- Dynamic Content Generated By JS -->
+    </div>
+  </section>
+
+  <!-- Module 3: 外汇结售汇机制 -->
+  <section>
+    <h2>💱 模块三：进出口企业“结售汇”与央行外汇占款（钱是怎么变成人民币的？）</h2>
+    <p class="desc">拆解企业出海赚了美元后，如何通过银行网络变成国内流通人民币的底层水路：</p>
+
+    <div class="grid-3">
+      <div class="card-box blue">
+        <div class="card-title">① 出口交货赚美钞</div>
+        <p style="font-size: 13px; color: #475569;">
+          中国外贸企业将工业品运至欧美，买家支付 <b>1000 万美元</b>。但我国境内法定唯一流通货币是人民币，美元不能直接发工资。
+        </p>
+      </div>
+
+      <div class="card-box green">
+        <div class="card-title">② 商业银行做结汇</div>
+        <p style="font-size: 13px; color: #475569;">
+          企业把 1000 万美元卖给中国银行，银行按当天牌价（1:7.1）换成 <b>7100 万人民币</b>打给企业。企业拿去买钢材、发工资。
+        </p>
+      </div>
+
+      <div class="card-box purple">
+        <div class="card-title">③ 央行外汇占款</div>
+        <p style="font-size: 13px; color: #475569;">
+          商业银行把多余美元卖给央行，央行印出等额基础货币买入。这笔新印出来的人民币叫<b>“外汇占款”</b>，收购的美元变成<b>“官方外汇储备”</b>！
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Module 4: 日元套息交易解构 -->
+  <section>
+    <h2>💴 模块四：金融史上最大套利案 —— 日元套息交易（Yen Carry Trade）</h2>
+    <p class="desc">为什么日本死守低息、美国暴力加息，能给华尔街和美国政府送上续命大礼包？</p>
+
+    <div class="grid-3">
+      <div class="card-box amber">
+        <div class="card-title">① 零成本借出日元</div>
+        <p style="font-size: 13px; color: #475569;">
+          日本央行长期维持 <b>-0.1% ~ 0%</b> 极低利率。投机机构在东京以极低几乎免费的成本借出几万亿日元。
+        </p>
+      </div>
+
+      <div class="card-box blue">
+        <div class="card-title">② 换成美元买美债/美股</div>
+        <p style="font-size: 13px; color: #475569;">
+          把日元抛售换成美元，买入年息 <b>5.5%</b> 的美国国债或纳斯达克科技股。<b>净躺赚 5% 以上利差 + 美股资产增值！</b>
+        </p>
+      </div>
+
+      <div class="card-box red">
+        <div class="card-title">③ 平仓踩踏反噬风暴</div>
+        <p style="font-size: 13px; color: #475569;">
+          一旦日本央行稍微加息（如 2024 年 8 月加息 15BP），利差收窄，数万亿美元热钱慌忙抛售美股换回日元还贷，<b>引发全球黑色星期一股灾！</b>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Module 5: 考点矩阵与秒杀口诀 -->
+  <section>
+    <h2>🔑 模块五：核心考点全景矩阵与 15 字秒杀口诀</h2>
+    
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>经济关系</th>
+          <th>因果机制</th>
+          <th>直观现象</th>
+          <th>15字秒杀口诀</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><b>利率 vs 老国债</b></td>
+          <td>跷跷板反向关系</td>
+          <td>新发借条利息高，老借条只能打折甩卖（降息则生债牛）</td>
+          <td><span class="tag tag-blue">利涨债跌跷跷板</span></td>
+        </tr>
+        <tr>
+          <td><b>利率 vs 新发国债</b></td>
+          <td>亦步亦趋同向关系</td>
+          <td>基准利率上涨，新国债票息必须提高才能卖出</td>
+          <td><span class="tag tag-blue">新债票息随基准</span></td>
+        </tr>
+        <tr>
+          <td><b>汇率 vs 进出口</b></td>
+          <td>本币购买力与成本外溢</td>
+          <td>升值出国买买买便宜（利进口）；贬值老外抢买中国制造（利出口）</td>
+          <td><span class="tag tag-green">升值利进贬利出</span></td>
+        </tr>
+        <tr>
+          <td><b>利率 vs 汇率资本</b></td>
+          <td>高息吸铁石原理</td>
+          <td>加息吸引全球热钱流入存高息，推升本币汇率</td>
+          <td><span class="tag tag-red">加息升值引热钱</span></td>
+        </tr>
+        <tr>
+          <td><b>国债一级 vs 二级</b></td>
+          <td>融资成本 vs 二手暴涨</td>
+          <td>降息时政府借钱成本极低，二级市场老债券价格暴涨</td>
+          <td><span class="tag tag-purple">新债降息老债牛</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+</div>
+
+<script>
+  const hikeChain = [
+    { num: '1', title: '央行加息（基准利率 ↑ · 爬坡山峰）', text: '央行为抑制国内通胀、防止经济过热，强制收紧流动性。' },
+    { num: '2', title: '国债市场两极分化', text: '<b>老国债价格暴跌</b>（市场利息更高，老借条打折甩卖）；<b>新发国债票面利率飙高</b>（政府发债融资成本大幅增加）。' },
+    { num: '3', title: '全球热钱蜂拥流入（高息吸铁石）', text: '国际投机客把本国低息货币换成该国货币去吃高息存款，该国本币供不应求 ➔ <b>本币强劲升值 ↑</b>。' },
+    { num: '4', title: '进出口格局剧变', text: '拿着更值钱的硬通货出国采购变便宜 ➔ <b>利于进口 ↑</b>；本国产品在国际市场上标价变贵 ➔ <b>抑制出口 ↓</b>。' }
+  ];
+
+  const cutChain = [
+    { num: '1', title: '央行降息（基准利率 ↓ · 下坡滑行）', text: '央行为刺激国内投资和老百姓买房消费，向商业银行注入海量廉价资金。' },
+    { num: '2', title: '国债市场爆发“大债牛”', text: '<b>老国债价格暴涨</b>（以前的固定高息成了抢手香饽饽）；<b>新发国债票面利率走低</b>（政府以极低利息发超长期国债建重大工程）。' },
+    { num: '3', title: '国内资金外流出逃', text: '嫌国内存款利息太低，资金抛售本币兑换成外币去海外寻求高收益 ➔ <b>本币大幅贬值 ↓</b>。' },
+    { num: '4', title: '外贸出口爆发式增长', text: '本国货币变便宜，国外买家发现本国制造物美价廉疯狂下外贸订单 ➔ <b>利于出口 ↑</b>；进口外国货变贵 ➔ <b>抑制进口 ↓</b>。' }
+  ];
+
+  function renderChain(data, isHike) {
+    const container = document.getElementById('chainContainer');
+    container.innerHTML = data.map(item => `
+      <div class="step-item" style="border-left: 4px solid ${isHike ? '#ef4444' : '#10b981'};">
+        <div class="step-num" style="background: ${isHike ? '#fee2e2' : '#dcfce7'}; color: ${isHike ? '#b91c1c' : '#15803d'};">${item.num}</div>
+        <div>
+          <div style="font-weight: 700; font-size: 15px; margin-bottom: 4px;">${item.title}</div>
+          <div style="font-size: 13px; color: #475569;">${item.text}</div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function setMode(mode) {
+    const btnHike = document.getElementById('btnHike');
+    const btnCut = document.getElementById('btnCut');
+    if (mode === 'hike') {
+      btnHike.className = 'btn active-hike';
+      btnCut.className = 'btn';
+      renderChain(hikeChain, true);
+    } else {
+      btnHike.className = 'btn';
+      btnCut.className = 'btn active-cut';
+      renderChain(cutChain, false);
+    }
+  }
+
+  // Initial render
+  setMode('hike');
+</script>
+
+</body>
+</html>

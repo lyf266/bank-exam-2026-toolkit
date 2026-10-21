@@ -1,0 +1,162 @@
+[
+  {
+    "id": "NON-TVM-001",
+    "type": "单选题",
+    "subject": "个人理财",
+    "question": "张先生将一笔 20 万元的闲置资金存入某商业银行定期存款，存期为 3 年，约定年利率为 4.5%，按单利计息。到期后张先生连本带利一共可取回（　　）万元。",
+    "options": {
+      "A": "22.70",
+      "B": "22.82",
+      "C": "22.95",
+      "D": "23.00"
+    },
+    "answer": "A",
+    "explanation": "<div style=\"background: rgba(37, 99, 235, 0.08); border-left: 4px solid #2563eb; padding: 10px 14px; margin-bottom: 12px; border-radius: 4px; line-height: 1.6;\"><div style=\"font-weight: 700; color: #1d4ed8; font-size: 14px; margin-bottom: 4px;\">🎯 【题型定位】单利终值与本息和模型（单利线性增长）</div><div style=\"color: #334155; font-size: 13px; margin-bottom: 4px;\"><b>💡 该怎么计算</b>：严禁按 TVM 键！直接使用单利终值公式 <b>FV = P × (1 + r × t)</b> 手工计算。</div><div style=\"color: #b91c1c; font-size: 13px;\"><b>⚠️ 为什么不能用 TVM</b>：TVM 芯片写死复利算法 (1+r)^N，按 TVM 会算出 22.82 万元（踩中 B 项复利陷阱）！</div></div><div style=\"line-height: 1.7; color: #334155;\">\n<b>【详细演算步骤】</b><br>\n1. <b>单利终值公式</b>：FV = P × (1 + r × t)<br>\n2. <b>参数代入</b>：本金 P = 20 万元，年利率 r = 4.5%，期限 t = 3 年<br>\n3. <b>逐步推导</b>：<br>\n   • 3 年累计单利倍数 = 1 + (4.5% × 3) = 1 + 0.135 = 1.135<br>\n   • 到期本息和 FV = 20 × 1.135 = <b>22.70 万元</b>（选项 A）<br>\n4. <b>利息校验</b>：3 年总利息 = 20 × 4.5% × 3 = 2.7 万元，本息合计 22.7 万元。\n</div>",
+    "mnemonic": "单利不滚利，一加rt乘本金",
+    "trap": "⚠️ 避坑提醒：审题第一步先找“单利”二字！看到单利严禁碰 TVM 键，TVM 算出来的 22.82 万元是出题人预设的复利陷阱！"
+  },
+  {
+    "id": "NON-TVM-002",
+    "type": "单选题",
+    "subject": "个人理财",
+    "question": "某企业持有一张面值为 50 万元、半年后到期的商业汇票向银行申请贴现，银行约定的年贴现利率为 6%，按单利计息。若不考虑其他手续费，该企业当前可获得的贴现现值约为（　　）万元。",
+    "options": {
+      "A": "48.54",
+      "B": "48.56",
+      "C": "47.17",
+      "D": "48.50"
+    },
+    "answer": "A",
+    "explanation": "<div style=\"background: rgba(37, 99, 235, 0.08); border-left: 4px solid #2563eb; padding: 10px 14px; margin-bottom: 12px; border-radius: 4px; line-height: 1.6;\"><div style=\"font-weight: 700; color: #1d4ed8; font-size: 14px; margin-bottom: 4px;\">🎯 【题型定位】单利逆向贴现现值模型（票据单利折现）</div><div style=\"color: #334155; font-size: 13px; margin-bottom: 4px;\"><b>💡 该怎么计算</b>：严禁按 TVM 键！分母为线性时间因子，使用单利现值公式 <b>PV = FV / (1 + r × t)</b> 手工除法计算。</div><div style=\"color: #b91c1c; font-size: 13px;\"><b>⚠️ 为什么不能用 TVM</b>：TVM 算的是复利贴现（50 / 1.06^0.5 = 48.56 万元，即 B 项）；若用直接扣息减法算成 50×(1-3%) = 48.50 万元（即 D 项）。</div></div><div style=\"line-height: 1.7; color: #334155;\">\n<b>【详细演算步骤】</b><br>\n1. <b>单利现值公式</b>：PV = FV / (1 + r × t)<br>\n2. <b>参数代入</b>：票面终值 FV = 50 万元，贴现率 r = 6%，期限半年 t = 0.5 年<br>\n3. <b>逐步推导</b>：<br>\n   • 分母贴现倍数 = 1 + (6% × 0.5) = 1 + 0.03 = 1.03<br>\n   • 贴现现值 PV = 50 ÷ 1.03 ≈ <b>48.5437 万元 ≈ 48.54 万元</b>（选项 A）<br>\n4. <b>机考易错辨析</b>：千万不要用减法算成 50 × (1 - 3%) = 48.50 万元，贴现必须做除法！\n</div>",
+    "mnemonic": "贴现单利求现值，终值除以一加rt",
+    "trap": "⚠️ 避坑提醒：贴现现值分母是 (1 + rt)，半年期限必须换算为 0.5 年！"
+  },
+  {
+    "id": "NON-TVM-003",
+    "type": "单选题",
+    "subject": "个人理财",
+    "question": "某小微企业计划购入一台节能生产设备，初始投资需一次性支出 50 万元。预计未来三年该设备在各年末分别带来净现金流入 20 万元、20 万元和 30 万元。若该企业的基准贴现率为 10%，则该设备投资项目的净现值（NPV）为（　　）万元。",
+    "options": {
+      "A": "7.25",
+      "B": "20.00",
+      "C": "8.65",
+      "D": "6.32"
+    },
+    "answer": "A",
+    "explanation": "<div style=\"background: rgba(37, 99, 235, 0.08); border-left: 4px solid #2563eb; padding: 10px 14px; margin-bottom: 12px; border-radius: 4px; line-height: 1.6;\"><div style=\"font-weight: 700; color: #1d4ed8; font-size: 14px; margin-bottom: 4px;\">🎯 【题型定位】不等额现金流净现值（NPV）决策模型</div><div style=\"color: #334155; font-size: 13px; margin-bottom: 4px;\"><b>💡 该怎么计算</b>：使用金融计算器 <b>[CF] 现金流工作表</b> 逐期录入，或手工逐年复利折现后加总求和。</div><div style=\"color: #b91c1c; font-size: 13px;\"><b>⚠️ 为什么不能用 TVM</b>：第 3 年回款为 30 万，每期现金流不相等！TVM 的 PMT 寄存器只能输入单一恒定常数，无法处理变动现金流。</div></div><div style=\"line-height: 1.7; color: #334155;\">\n<b>【计算器标准按键步骤（TI BA II Plus）】</b><br>\n1. 按 <code>[CF]</code>，按 <code>[2nd] [CLR WORK]</code>（清空历史内存）；<br>\n2. 输入初始投资：<code>CF0 = -50</code>（按 <code>[+/-]</code> 变负数后按 <code>[ENTER]</code>），按 ↓；<br>\n3. 输入第1~2年流入：<code>C01 = 20</code>，按 <code>[ENTER]</code>，按 ↓；<code>F01 = 2</code>（频数设为2），按 ↓；<br>\n4. 输入第3年流入：<code>C02 = 30</code>，按 <code>[ENTER]</code>，按 ↓；<code>F02 = 1</code>；<br>\n5. 求解净现值：按 <code>[NPV]</code>，输入 <code>I = 10</code>，按 <code>[ENTER]</code>，按 ↓，按左上角 <code>[CPT]</code> ➔ 立即输出 <b>7.25 万元</b>（选项 A）！<br><br>\n<b>【手工代数验证】</b><br>\nNPV = -50 + 20/1.1 + 20/1.21 + 30/1.331 = -50 + 18.1818 + 16.5289 + 22.5394 = <b>7.25 万元</b>。\n</div>",
+    "mnemonic": "不等现金走CF，逐期折现求净现",
+    "trap": "⚠️ 避坑提醒：B 选项 20 万元是不折现的名义总利润（20+20+30-50=20），只要现金流各期不相等，必须转战 CF 工作表！"
+  },
+  {
+    "id": "NON-TVM-004",
+    "type": "单选题",
+    "subject": "个人理财",
+    "question": "某投资项目初始投资额为 100 万元，预计第 1 年末产生净现金流入 60 万元，第 2 年末产生净现金流入 72 万元，之后项目终止。该投资项目的内部回报率（IRR）为（　　）。",
+    "options": {
+      "A": "15%",
+      "B": "18%",
+      "C": "20%",
+      "D": "32%"
+    },
+    "answer": "C",
+    "explanation": "<div style=\"background: rgba(37, 99, 235, 0.08); border-left: 4px solid #2563eb; padding: 10px 14px; margin-bottom: 12px; border-radius: 4px; line-height: 1.6;\"><div style=\"font-weight: 700; color: #1d4ed8; font-size: 14px; margin-bottom: 4px;\">🎯 【题型定位】内部回报率（IRR）内生收益率模型</div><div style=\"color: #334155; font-size: 13px; margin-bottom: 4px;\"><b>💡 该怎么计算</b>：使用金融计算器 <b>[CF] 工作表</b> 录入现金流后按 <b>[IRR] ➔ [CPT]</b> 求解，或代数代入检验。</div><div style=\"color: #b91c1c; font-size: 13px;\"><b>⚠️ 为什么不能用 TVM</b>：现金流不等额且求内生收益率，TVM 键无此联动机制；手算需解高次方程。</div></div><div style=\"line-height: 1.7; color: #334155;\">\n<b>【计算器标准按键步骤】</b><br>\n1. 按 <code>[CF]</code>，按 <code>[2nd] [CLR WORK]</code>；<br>\n2. <code>CF0 = -100</code>，按 <code>[ENTER]</code>，按 ↓；<br>\n3. <code>C01 = 60</code>，按 <code>[ENTER]</code>，按 ↓；<code>F01 = 1</code>，按 ↓；<br>\n4. <code>C02 = 72</code>，按 <code>[ENTER]</code>，按 ↓；<code>F02 = 1</code>；<br>\n5. 按 <code>[IRR]</code>，按左上角 <code>[CPT]</code> ➔ 屏幕计算后直接输出 <b>20.00%</b>（选项 C）！<br><br>\n<b>【手工方程代入验证】</b><br>\n内部回报率是使 NPV = 0 的贴现率：-100 + 60/(1+r) + 72/(1+r)^2 = 0<br>\n代入 r = 20% 验证：-100 + 60/1.2 + 72/1.44 = -100 + 50 + 50 = 0，完全吻合！\n</div>",
+    "mnemonic": "IRR即NPV零，不等现金CF寻",
+    "trap": "⚠️ 避坑提醒：D 选项 32% 是不贴现的名义总收益率 ((60+72-100)/100 = 32%)，IRR 必须考虑复利时间价值！"
+  },
+  {
+    "id": "NON-TVM-005",
+    "type": "单选题",
+    "subject": "个人理财",
+    "question": "某上市公司拟发行一批永久存续的优先股，每股面值 100 元，约定每年年末每股固定派发股息 6 元，无到期日。若当前市场上同类风险资产的必要收益率（贴现率）为 8%，则根据金融估值模型，该优先股的理论现值（内在价值）为（　　）元。",
+    "options": {
+      "A": "75.00",
+      "B": "80.00",
+      "C": "100.00",
+      "D": "120.00"
+    },
+    "answer": "A",
+    "explanation": "<div style=\"background: rgba(37, 99, 235, 0.08); border-left: 4px solid #2563eb; padding: 10px 14px; margin-bottom: 12px; border-radius: 4px; line-height: 1.6;\"><div style=\"font-weight: 700; color: #1d4ed8; font-size: 14px; margin-bottom: 4px;\">🎯 【题型定位】固定永续年金现值模型（无限期贴现）</div><div style=\"color: #334155; font-size: 13px; margin-bottom: 4px;\"><b>💡 该怎么计算</b>：直接套用永续年金极限公式 <b>PV = C / r</b>，直接用年金除以折现率。</div><div style=\"color: #b91c1c; font-size: 13px;\"><b>⚠️ 为什么不能用 TVM</b>：期限无限（N = ∞），TVM 必须输入具体有限整数 N，若盲目输入 N=10 会算出完全错误的有限现值。</div></div><div style=\"line-height: 1.7; color: #334155;\">\n<b>【详细演算步骤】</b><br>\n1. <b>核心公式</b>：PV = C / r（无限等比数列求和极限）<br>\n2. <b>参数代入</b>：每期固定现金流 C = 6 元，贴现率 r = 8% = 0.08<br>\n3. <b>一键计算</b>：PV = 6 ÷ 0.08 = <b>75.00 元</b>（选项 A）<br>\n4. <b>金融本质</b>：永续年金没有到期偿还本金的概念，其内在价值完全由永续股息流折现决定。\n</div>",
+    "mnemonic": "永续年金无限期，年金除以折现率",
+    "trap": "⚠️ 避坑提醒：永续年金切勿在 TVM 键盲输一个很大的 N！牢记闭式公式 PV = C / r 秒杀。"
+  },
+  {
+    "id": "NON-TVM-006",
+    "type": "单选题",
+    "subject": "个人理财",
+    "question": "某高成长性企业拟定于下一年度年末派发每股现金分红 4 元，并预期此后每年的分红金额将以 2% 的固定增长率持续永续递增。若投资者的期望年贴现率为 7%，则该企业股票的理论现值为（　　）元。",
+    "options": {
+      "A": "57.14",
+      "B": "80.00",
+      "C": "44.44",
+      "D": "200.00"
+    },
+    "answer": "B",
+    "explanation": "<div style=\"background: rgba(37, 99, 235, 0.08); border-left: 4px solid #2563eb; padding: 10px 14px; margin-bottom: 12px; border-radius: 4px; line-height: 1.6;\"><div style=\"font-weight: 700; color: #1d4ed8; font-size: 14px; margin-bottom: 4px;\">🎯 【题型定位】增长型永续年金估值模型（戈登股利增长模型）</div><div style=\"color: #334155; font-size: 13px; margin-bottom: 4px;\"><b>💡 该怎么计算</b>：套用戈登模型公式 <b>PV = D1 / (r - g)</b>，分母用贴现率减去增长率。</div><div style=\"color: #b91c1c; font-size: 13px;\"><b>⚠️ 为什么不能用 TVM</b>：TVM 既无法输入增长率 g=2%，也无法输入无穷期数 N=∞。</div></div><div style=\"line-height: 1.7; color: #334155;\">\n<b>【详细演算步骤】</b><br>\n1. <b>戈登模型公式</b>：PV = D1 / (r - g)<br>\n2. <b>参数代入</b>：下一期分红 D1 = 4 元，年贴现率 r = 7%，恒定年增长率 g = 2%<br>\n3. <b>逐步推导</b>：<br>\n   • 净贴现率差额 = r - g = 7% - 2% = 5% = 0.05<br>\n   • 股票理论现值 PV = 4 ÷ 0.05 = <b>80.00 元</b>（选项 B）<br>\n4. <b>干扰项成因</b>：<br>\n   • A 项 57.14 元：误按无增长永续年金计算（4 / 0.07）；<br>\n   • C 项 44.44 元：分母符号算反，误算为 4 / (0.07 + 0.02) = 4 / 0.09。\n</div>",
+    "mnemonic": "增长永续算现值，年金除以差额率",
+    "trap": "⚠️ 避坑提醒：分母必须是差额 (r - g)！增长率抵消了贬值损失，现值必然高于无增长的年金！"
+  },
+  {
+    "id": "NON-TVM-007",
+    "type": "单选题",
+    "subject": "个人理财",
+    "question": "某股票型理财产品在过去连续三年的年度投资收益率分别为 30%、-20% 和 10%。则该理财产品在这三年期间的几何平均年化收益率约为（　　）。",
+    "options": {
+      "A": "6.67%",
+      "B": "4.59%",
+      "C": "7.20%",
+      "D": "5.12%"
+    },
+    "answer": "B",
+    "explanation": "<div style=\"background: rgba(37, 99, 235, 0.08); border-left: 4px solid #2563eb; padding: 10px 14px; margin-bottom: 12px; border-radius: 4px; line-height: 1.6;\"><div style=\"font-weight: 700; color: #1d4ed8; font-size: 14px; margin-bottom: 4px;\">🎯 【题型定位】时间加权几何平均年化收益率模型</div><div style=\"color: #334155; font-size: 13px; margin-bottom: 4px;\"><b>💡 该怎么计算</b>：连乘各年收益倍数后开 n 次方根减 1：<b>Rg = [(1+R1)(1+R2)...(1+Rn)]^(1/n) - 1</b>。</div><div style=\"color: #b91c1c; font-size: 13px;\"><b>⚠️ 为什么不能用 TVM</b>：TVM 假定每期复合利率为恒定常数，无法处理变动离散收益率序列。</div></div><div style=\"line-height: 1.7; color: #334155;\">\n<b>【详细演算步骤】</b><br>\n1. <b>连乘收益因子</b>：(1 + 30%) × (1 - 20%) × (1 + 10%) = 1.3 × 0.8 × 1.1 = 1.144<br>\n2. <b>开 3 次方根并减 1</b>：(1.144)^(1/3) - 1 ≈ 1.04586 - 1 = <b>4.586% ≈ 4.59%</b>（选项 B）<br>\n3. <b>机考大坑辨析</b>：<br>\n   • A 选项 6.67% 为简单算术平均数：(30% - 20% + 10%) ÷ 3 = 6.67%！<br>\n   • 只要收益率存在波动，<b>几何平均数必然严格小于算术平均数</b>！\n</div>",
+    "mnemonic": "各年本息连环乘，开方减一几何均",
+    "trap": "⚠️ 避坑提醒：看到“几何平均”切勿直接相加除以 3！机考中算术平均数往往是排名第一的干扰项！"
+  },
+  {
+    "id": "NON-TVM-008",
+    "type": "单选题",
+    "subject": "个人理财",
+    "question": "某投资者在二级市场上以 96 元的价格买入面值为 100 元、票面年利率为 6%、每年末付息一次的某商业银行金融债券，剩余期限为 3 年。若该投资者持有该债券一年并获得当期利息，则该债券的当期收益率（Current Yield）为（　　）。",
+    "options": {
+      "A": "6.00%",
+      "B": "6.25%",
+      "C": "7.55%",
+      "D": "4.17%"
+    },
+    "answer": "B",
+    "explanation": "<div style=\"background: rgba(37, 99, 235, 0.08); border-left: 4px solid #2563eb; padding: 10px 14px; margin-bottom: 12px; border-radius: 4px; line-height: 1.6;\"><div style=\"font-weight: 700; color: #1d4ed8; font-size: 14px; margin-bottom: 4px;\">🎯 【题型定位】债券当期收益率（Current Yield）即期指标模型</div><div style=\"color: #334155; font-size: 13px; margin-bottom: 4px;\"><b>💡 该怎么计算</b>：直接做除法：<b>当期收益率 = 年票面利息 / 债券购买市价</b>。</div><div style=\"color: #b91c1c; font-size: 13px;\"><b>⚠️ 为什么不能用 TVM</b>：概念混淆大坑！若按 TVM 会算出 7.55%，那是考虑本金偿付与折价摊销的<b>到期收益率（YTM）</b>，不是当期收益率！</div></div><div style=\"line-height: 1.7; color: #334155;\">\n<b>【详细演算步骤】</b><br>\n1. <b>计算年票面利息</b>：面值 100 元 × 票面利率 6% = 6 元<br>\n2. <b>计算当期收益率</b>：年利息 6 元 ÷ 买入市价 96 元 = 0.0625 = <b>6.25%</b>（选项 B）<br>\n3. <b>指标区别透视</b>：<br>\n   • 当期收益率（6.25%）：仅反映当前利息收入与买入成本的比率；<br>\n   • 到期收益率 YTM（7.55%）：TVM 求解综合回报率（涵盖 4 元折价摊销收益）。\n</div>",
+    "mnemonic": "当期收益最简单，当年利息除买价",
+    "trap": "⚠️ 避坑提醒：审题看清是“当期收益率”还是“到期收益率”！当期收益率直接利息除以市价，不用按 TVM！"
+  },
+  {
+    "id": "NON-TVM-009",
+    "type": "单选题",
+    "subject": "个人理财",
+    "question": "某理财资金池名义年利率（计息周期利率）为 6%，若按照连续复利（Continuous Compounding）方式计息，则该投资在 1 年后的有效年利率（EAR）约为（　　）。（已知：e^0.06 ≈ 1.061837）",
+    "options": {
+      "A": "6.00%",
+      "B": "6.09%",
+      "C": "6.18%",
+      "D": "6.36%"
+    },
+    "answer": "C",
+    "explanation": "<div style=\"background: rgba(37, 99, 235, 0.08); border-left: 4px solid #2563eb; padding: 10px 14px; margin-bottom: 12px; border-radius: 4px; line-height: 1.6;\"><div style=\"font-weight: 700; color: #1d4ed8; font-size: 14px; margin-bottom: 4px;\">🎯 【题型定位】连续复利微积分极限转换模型</div><div style=\"color: #334155; font-size: 13px; margin-bottom: 4px;\"><b>💡 该怎么计算</b>：套用自然常数指数公式：<b>EAR = e^r - 1</b>。</div><div style=\"color: #b91c1c; font-size: 13px;\"><b>⚠️ 为什么不能用 TVM</b>：TVM 计息频次 P/Y 只能输入离散整数，无法处理无限次微积分连续极限。</div></div><div style=\"line-height: 1.7; color: #334155;\">\n<b>【详细演算步骤】</b><br>\n1. <b>连续复利有效年利率公式</b>：EAR = e^r - 1<br>\n2. <b>参数代入</b>：名义利率 r = 6% = 0.06，题目已知 e^0.06 ≈ 1.061837<br>\n3. <b>计算有效年利率</b>：EAR = 1.061837 - 1 = 0.061837 ≈ <b>6.18%</b>（选项 C）<br>\n4. <b>知识延伸</b>：年复利为 6%；半年复利为 6.09%；月复利为 6.168%；连续复利为极限上限 6.18%。\n</div>",
+    "mnemonic": "连续复利无尽头，自然常数e作底",
+    "trap": "⚠️ 避坑提醒：看到“连续复利”，公式直接套用自然指数 e^r - 1。"
+  },
+  {
+    "id": "NON-TVM-010",
+    "type": "单选题",
+    "subject": "个人理财",
+    "question": "某理财顾问为客户做财富规划时，建议客户将资金配置在年复合收益率为 8% 的稳健型资产组合中。根据理财规划中的“72法则”（经验估算法），该笔投资本金翻倍大约需要（　　）年。",
+    "options": {
+      "A": "8.0",
+      "B": "9.0",
+      "C": "9.01",
+      "D": "12.5"
+    },
+    "answer": "B",
+    "explanation": "<div style=\"background: rgba(37, 99, 235, 0.08); border-left: 4px solid #2563eb; padding: 10px 14px; margin-bottom: 12px; border-radius: 4px; line-height: 1.6;\"><div style=\"font-weight: 700; color: #1d4ed8; font-size: 14px; margin-bottom: 4px;\">🎯 【题型定位】理财经理速算与“72法则”经验模型</div><div style=\"color: #334155; font-size: 13px; margin-bottom: 4px;\"><b>💡 该怎么计算</b>：直接口算整除：<b>翻倍年数 T ≈ 72 / 收益率数值</b>。</div><div style=\"color: #b91c1c; font-size: 13px;\"><b>⚠️ 为什么不能用 TVM</b>：若用 TVM 算精确对数解会算出 9.01 年（对应 C 项），但题干指明“72法则”，严格考核口算经验整数！</div></div><div style=\"line-height: 1.7; color: #334155;\">\n<b>【详细演算步骤】</b><br>\n1. <b>72 法则经验公式</b>：T ≈ 72 / (收益率百分数数字)<br>\n2. <b>直接整除</b>：T ≈ 72 ÷ 8 = <b>9.0 年</b>（选项 B）<br>\n3. <b>机考避坑核实</b>：<br>\n   • 若用 TVM 精确求解：PV=-1, FV=2, I/Y=8 ➔ CPT N 算出 9.006 年 ≈ 9.01 年；<br>\n   • 机考出现“根据72法则”，必须选 72 整除的近似值 9.0 年，选 9.01 年反而判定错误！\n</div>",
+    "mnemonic": "翻倍年数七十二，七十二除收益率",
+    "trap": "⚠️ 避坑提醒：题干标明“72法则”时切勿按 TVM 算精确解！72 ÷ 8 = 9.0 年。"
+  }
+]

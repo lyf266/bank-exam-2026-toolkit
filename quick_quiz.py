@@ -23,6 +23,13 @@ import random
 import datetime
 import re
 
+from tools.coefficient_table import (
+    interactive_coefficient_menu,
+    interactive_lookup,
+    get_coefficients_all,
+    print_table_view
+)
+
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.join(BASE_DIR, "data", "past_papers")
 MISTAKE_LOG_PATH = os.path.join(BASE_DIR, "错题本_盲区特训账本.md")
@@ -148,7 +155,7 @@ def run_quiz(questions, title="2026 银行从业全真机考极速自测", non_i
 
     cprint("=" * 70, COLOR_CYAN)
     cprint(f"🎯 {title} (本次测试共 {total} 题)", COLOR_CYAN, bold=True)
-    cprint("💡 答题说明：单选输入 A/B/C/D；多选输入字母组合如 ABC；判断输入 A(正确)/B(错误)；输入 q 随时退出。", COLOR_YELLOW)
+    cprint("💡 答题说明：单选输入 A/B/C/D；多选输入字母组合如 ABC；判断输入 A(正确)/B(错误)；输入 T 查机考专用系数表；输入 q 退出。", COLOR_YELLOW)
     cprint("=" * 70, COLOR_CYAN)
 
     score = 0.0
@@ -200,16 +207,26 @@ def run_quiz(questions, title="2026 银行从业全真机考极速自测", non_i
 
             while True:
                 try:
-                    user_input = input(f"\n👉 请输入你的选项 ({prompt_tip} 或 q 退出): ").strip().upper()
+                    user_input = input(f"\n👉 请输入你的选项 ({prompt_tip} | 输入 T 查系数表 | q 退出): ").strip().upper()
                 except (EOFError, KeyboardInterrupt):
                     print("\n测试已中断。")
                     return
+                if user_input in ["T", "TABLE", "TAB", "XS", "XSB", "系数表"]:
+                    interactive_coefficient_menu()
+                    # 查表完毕后，重新打印题目简要提示，继续让考生作答当前题目
+                    print(f"\n【继续作答 第 {idx}/{total} 题】[{q_type} · {weight}分] ({q_id})")
+                    print(f"{q['question']}")
+                    for opt_k in sorted(opts.keys()):
+                        opt_v = opts[opt_k]
+                        if opt_v:
+                            print(f"   {opt_k}. {opt_v}")
+                    continue
                 if user_input == "Q":
                     print("\n测试已提前结束。")
                     break
                 if user_input:
                     break
-                print("⚠️ 输入不能为空，请输入选项字母。")
+                print("⚠️ 输入不能为空，请输入选项字母，或输入 T 查阅机考专用系数表。")
 
             if user_input == "Q":
                 break
@@ -270,11 +287,12 @@ def interactive_menu():
         print("3. 🏛️ 《银行业法律法规与综合能力》（全量真题抽测）")
         print("4. 💰 《个人理财》（全量真题抽测，含 TVM 直观公式推导）")
         print("5. 📖 查阅工作区错题本与盲区特训账本")
+        print("6. 📊 官方机考专用系数表与 TVM 速查系统 (全真机考官方附表 · 四大系数)")
         print("0. 退出系统")
         cprint("=" * 70, COLOR_CYAN)
 
         try:
-            choice = input("👉 请选择功能菜单 (0-5): ").strip()
+            choice = input("👉 请选择功能菜单 (0-6): ").strip()
         except (EOFError, KeyboardInterrupt):
             print("\n再见！祝备考顺利，60分稳过！")
             break
@@ -341,6 +359,9 @@ def interactive_menu():
                 print(f"\n... (全文共 {len(lines)} 行，完整内容请在编辑器中查看《错题本_盲区特训账本.md》)")
             else:
                 cprint("⚠️ 错题本文件尚不存在。", COLOR_YELLOW)
+        elif choice == "6":
+            # 官方机考专用系数表
+            interactive_coefficient_menu()
         else:
             cprint("⚠️ 无效输入，请输入对应的菜单数字。", COLOR_YELLOW)
 
@@ -352,7 +373,26 @@ def main():
     parser.add_argument("--finance", action="store_true", help="仅自测《个人理财》")
     parser.add_argument("--num", type=int, default=0, help="随机抽取题目数量")
     parser.add_argument("--list", action="store_true", help="列出全部可用试卷与题量统计")
+    parser.add_argument("--table", action="store_true", help="查阅官方机考专用系数表与 TVM 速查系统")
+    parser.add_argument("--rate", type=float, default=0.0, help="指定利率 (如 5 代表 5%%) 用于快速查系数")
+    parser.add_argument("-p", "--period", type=int, default=0, help="指定期数 n (如 5) 用于快速查系数")
     args = parser.parse_args()
+
+    if args.table:
+        if args.rate > 0 and args.period > 0:
+            data = get_coefficients_all(args.rate, args.period)
+            print("\n" + "=" * 68)
+            print(f"📊 官方机考专用系数查询结果 (利率: {args.rate}%, 期数: {args.period}):")
+            print("=" * 68)
+            print(f"  • 复利终值系数 (F/P, {args.rate}%, {args.period}): {data['FP']:.4f}")
+            print(f"  • 复利现值系数 (P/F, {args.rate}%, {args.period}): {data['PF']:.4f}")
+            print(f"  • 年金终值系数 (F/A, {args.rate}%, {args.period}): {data['FA']:.4f}")
+            print(f"  • 年金现值系数 (P/A, {args.rate}%, {args.period}): {data['PA']:.4f}")
+            print(f"  • 偿债基金系数 (A/F): {data['sinking_fund']:.4f} | 投资回收系数 (A/P): {data['capital_recovery']:.4f}")
+            print("=" * 68 + "\n")
+        else:
+            interactive_coefficient_menu()
+        return
 
     papers = load_all_papers()
 

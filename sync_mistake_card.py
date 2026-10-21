@@ -59,10 +59,16 @@ def add_mistake_note(q, deck_name=DEFAULT_DECK):
     """添加或更新单道错题卡片"""
     ensure_deck_and_config(deck_name)
     
-    # 查重检测：按题干搜索是否已存在
-    escaped_question = q["question"].replace('"', '\\"').replace(":", "\\:").strip()
-    query = f'deck:"{deck_name}" "{escaped_question[:30]}"'
-    existing_cards = anki_invoke("findCards", query=query)
+    # 查重检测：优先按 ID，其次按清洗后的题干文本搜索
+    existing_cards = []
+    if q.get("id") and q.get("id") != "MISTAKE-AUTO":
+        existing_cards = anki_invoke("findCards", query=f'deck:"{deck_name}" ID:{q["id"]}')
+    
+    if not existing_cards:
+        import re
+        clean_q = re.sub(r'[^\w\u4e00-\u9fff]', '', q["question"])[:20]
+        if clean_q:
+            existing_cards = anki_invoke("findCards", query=f'deck:"{deck_name}" {clean_q}')
     
     options = q.get("options", {})
     fields = {
